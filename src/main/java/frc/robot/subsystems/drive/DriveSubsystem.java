@@ -15,16 +15,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.controllers.CommandCustomXboxController;
 import frc.robot.util.SparkUtil;
 
 public class DriveSubsystem implements Subsystem {
 
-    public final SparkMax frontLeft = new SparkMax(DriveConstants.kFrontLeftId, MotorType.kBrushless);
-    public final SparkMax frontRight = new SparkMax(DriveConstants.kFrontRightId, MotorType.kBrushless);
-    public final SparkMax backLeft = new SparkMax(DriveConstants.kBackLeftId, MotorType.kBrushless);
-    public final SparkMax backRight = new SparkMax(DriveConstants.kBackRightId, MotorType.kBrushless);
+    public final SparkMax frontLeft = new SparkMax(DriveConstants.kFrontLeftId, MotorType.kBrushed);
+    public final SparkMax frontRight = new SparkMax(DriveConstants.kFrontRightId, MotorType.kBrushed);
+    public final SparkMax backLeft = new SparkMax(DriveConstants.kBackLeftId, MotorType.kBrushed);
+    public final SparkMax backRight = new SparkMax(DriveConstants.kBackRightId, MotorType.kBrushed);
 
     private final DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
+
+    private final CommandCustomXboxController driverController = new CommandCustomXboxController(0);
 
     public DriveSubsystem() {
         configureMotorSettings();
@@ -64,8 +67,6 @@ public class DriveSubsystem implements Subsystem {
     }
 
     public Command driveCommand(DoubleSupplier forward, DoubleSupplier rotation) {
-        SmartDashboard.putNumber("Forward", forward.getAsDouble());
-
         return Commands.run(() -> {
             if (forward.getAsDouble() != 0) {
                 drive.curvatureDrive(forward.getAsDouble(), rotation.getAsDouble(), false);

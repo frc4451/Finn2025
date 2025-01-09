@@ -23,7 +23,7 @@ public class RobotContainer {
   private void configureBindings() {
     driveSubsystem
         .setDefaultCommand(
-            driveSubsystem.driveCommand(() -> -driveController.getLeftY(), () -> driveController.getRightX()));
+            driveSubsystem.driveCommand(() -> -driveController.getLeftY(), () -> -driveController.getRightX()));
   }
 
   public Command getAutonomousCommand() {

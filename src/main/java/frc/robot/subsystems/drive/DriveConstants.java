@@ -6,7 +6,7 @@ public class DriveConstants {
     public static final int kBackLeftId = 3;
     public static final int kBackRightId = 4;
 
-    public static final double kRampRateSeconds = 0.6;
+    public static final double kRampRateSeconds = 0.3;
 
     public static final boolean kLeftInverted = true;
     public static final boolean kRightInverted = false;

@@ -11,6 +11,7 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 
 public class RobotContainer {
 
+  // space for calling subsystems and what not
   private final CommandCustomXboxController driveController = new CommandCustomXboxController(
       Constants.XboxDriverControllerPort);
 
@@ -19,8 +20,9 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
   }
-
+  //*configures the bindings for any controllers */
   private void configureBindings() {
+    //sets the default command for the drive train
     driveSubsystem
         .setDefaultCommand(
             driveSubsystem.driveCommand(() -> -driveController.getLeftY(), () -> -driveController.getRightX()));

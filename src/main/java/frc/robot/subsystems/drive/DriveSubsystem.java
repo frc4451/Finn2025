@@ -21,11 +21,13 @@ import frc.robot.util.SparkUtil;
 
 public class DriveSubsystem implements Subsystem {
 
+    // makes the drive train motors
     public final SparkMax frontLeft = new SparkMax(DriveConstants.kFrontLeftId, MotorType.kBrushed);
     public final SparkMax frontRight = new SparkMax(DriveConstants.kFrontRightId, MotorType.kBrushed);
     public final SparkMax backLeft = new SparkMax(DriveConstants.kBackLeftId, MotorType.kBrushed);
     public final SparkMax backRight = new SparkMax(DriveConstants.kBackRightId, MotorType.kBrushed);
 
+    //connects the motors for curvatureDrive
     private final DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
 
     public DriveSubsystem() {
@@ -34,15 +36,15 @@ public class DriveSubsystem implements Subsystem {
 
     @Override
     public void periodic() {
-        // applied voltage
-        // current (amperage)
-        // temperature (celsius)
+        // pulled periodic for drivetrain/motor logging
         logMotor("FrontLeft", frontLeft);
         logMotor("FrontRight", frontRight);
         logMotor("BackLeft", backLeft);
         logMotor("BackRight", backRight);
     }
 
+    /*
+    *for logging SparkBase motors, logs Applied Voltage, Current, and Motor Temp in Celsius */
     private void logMotor(String motorName, SparkBase spark) {
         SmartDashboard.putNumber(motorName + "/AppliedVoltage", spark.getBusVoltage() * spark.getAppliedOutput());
         SmartDashboard.putNumber(motorName + "/Current", spark.getOutputCurrent());
@@ -50,6 +52,8 @@ public class DriveSubsystem implements Subsystem {
 
     }
 
+    //*configures motors for drivetrain. sets the open loop ramp rate, idle mode
+    //, inverson, and back motor follwing */
     private void configureMotorSettings() {
         SparkBaseConfig config = new SparkMaxConfig();
         config.openLoopRampRate(DriveConstants.kRampRateSeconds)

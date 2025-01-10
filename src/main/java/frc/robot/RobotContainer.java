@@ -26,8 +26,9 @@ public class RobotContainer {
     driveSubsystem
         .setDefaultCommand(
             driveSubsystem.driveCommand(() -> -driveController.getLeftY(), () -> -driveController.getRightX()));
-  
-    }
+    
+    driveController.rightBumper().whileTrue(driveSubsystem.driveCommand(() -> 1.0, () -> 0.0));
+  }
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");

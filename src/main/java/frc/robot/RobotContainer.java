@@ -15,6 +15,7 @@ public class RobotContainer {
       Constants.XboxDriverControllerPort);
 
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  private final ScoringMotorSubsystem scoringMotorSubsystem = new ScoringMotorSubsystem();
 
   public RobotContainer() {
     configureBindings();
@@ -24,6 +25,10 @@ public class RobotContainer {
     driveSubsystem
         .setDefaultCommand(
             driveSubsystem.driveCommand(() -> -driveController.getLeftY(), () -> -driveController.getRightX()));
+    scoringMotorSubsystem
+      .setDefaultCommand(
+        driveController.rightTrigger());
+
   }
 
   public Command getAutonomousCommand() {

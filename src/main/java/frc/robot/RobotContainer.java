@@ -20,7 +20,7 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
   }
-  /**configures the bindings for any controllers */
+  //*configures the bindings for any controllers */
   private void configureBindings() {
     //sets the default command for the drive train
     driveSubsystem
@@ -28,7 +28,7 @@ public class RobotContainer {
             driveSubsystem.driveCommand(() -> -driveController.getLeftY(), () -> -driveController.getRightX()));
 
     driveController.a().whileFalse(null);
-    //uaeghsff8hiu
+    
     driveController.rightBumper().whileTrue(driveSubsystem.driveCommand(() -> 1.0, () -> 0.0));
   }
 

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.controllers.CommandCustomXboxController;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.scoring.ScoringSubsystem;
 
 public class RobotContainer {
 
@@ -15,7 +16,7 @@ public class RobotContainer {
       Constants.XboxDriverControllerPort);
 
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-  private final ScoringMotorSubsystem scoringMotorSubsystem = new ScoringMotorSubsystem();
+  private final ScoringSubsystem scoringSubsystem = new ScoringSubsystem();
 
   public RobotContainer() {
     configureBindings();
@@ -25,10 +26,9 @@ public class RobotContainer {
     driveSubsystem
         .setDefaultCommand(
             driveSubsystem.driveCommand(() -> -driveController.getLeftY(), () -> -driveController.getRightX()));
-    scoringMotorSubsystem
-      .setDefaultCommand(
-        driveController.rightTrigger());
 
+    driveController.rightTrigger()
+        .whileTrue(scoringSubsystem.shoot());
   }
 
   public Command getAutonomousCommand() {

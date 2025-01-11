@@ -20,7 +20,7 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
   }
-  //*configures the bindings for any controllers */
+  /**configures the bindings for any controllers */
   private void configureBindings() {
     //sets the default command for the drive train
     driveSubsystem

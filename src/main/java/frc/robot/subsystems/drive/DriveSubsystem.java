@@ -43,8 +43,7 @@ public class DriveSubsystem implements Subsystem {
         logMotor("BackRight", backRight);
     }
 
-    /*
-    *for logging SparkBase motors, logs Applied Voltage, Current, and Motor Temp in Celsius */
+    /**for logging SparkBase motors, logs Applied Voltage, Current, and Motor Temp in Celsius*/
     private void logMotor(String motorName, SparkBase spark) {
         SmartDashboard.putNumber(motorName + "/AppliedVoltage", spark.getBusVoltage() * spark.getAppliedOutput());
         SmartDashboard.putNumber(motorName + "/Current", spark.getOutputCurrent());
@@ -52,8 +51,9 @@ public class DriveSubsystem implements Subsystem {
 
     }
 
-    //*configures motors for drivetrain. sets the open loop ramp rate, idle mode
-    //, inverson, and back motor follwing */
+    /**configures motors for drivetrain. sets the open loop ramp rate, idle mode, 
+     * inverson, and back motor follwing
+     */
     private void configureMotorSettings() {
         SparkBaseConfig config = new SparkMaxConfig();
         config.openLoopRampRate(DriveConstants.kRampRateSeconds)
@@ -87,6 +87,7 @@ public class DriveSubsystem implements Subsystem {
 
     }
 
+    /**Command for controlling to drivetrain*/
     public Command driveCommand(DoubleSupplier forward, DoubleSupplier rotation) {
         return Commands.run(() -> {
             if (forward.getAsDouble() > ControllerConstants.kJoystickDeadband

@@ -20,16 +20,18 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
   }
-  //*configures the bindings for any controllers */
+
+  // *configures the bindings for any controllers */
   private void configureBindings() {
-    //sets the default command for the drive train
+    // sets the default command for the drive train
     driveSubsystem
         .setDefaultCommand(
             driveSubsystem.driveCommand(() -> -driveController.getLeftY(), () -> -driveController.getRightX()));
 
-    driveController.a().whileFalse(null);
-    
-    driveController.rightBumper().whileTrue(driveSubsystem.driveCommand(() -> 1.0, () -> 0.0));
+    // driveController.a().whileFalse(null);
+
+    // driveController.rightBumper().whileTrue(driveSubsystem.driveCommand(() ->
+    // 1.0, () -> 0.0));
   }
 
   public Command getAutonomousCommand() {

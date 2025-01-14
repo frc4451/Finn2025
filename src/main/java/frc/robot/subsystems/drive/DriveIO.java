@@ -29,7 +29,7 @@ public interface DriveIO {
     }
 
     public default void stop() {
-        setVoltage(0.0, 0.0);
+        // setVoltage(0.0, 0.0);
     }
 
 }

@@ -10,6 +10,9 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.controllers.ControllerConstants;
 import frc.robot.util.SparkUtil;
 
 public class DriveIOSpark implements DriveIO {
@@ -21,7 +24,7 @@ public class DriveIOSpark implements DriveIO {
     private final RelativeEncoder rightEncoder = rightLeader.getEncoder();
     private final SparkClosedLoopController leftController = leftLeader.getClosedLoopController();
     private final SparkClosedLoopController rightController = rightLeader.getClosedLoopController();
-    
+
     public DriveIOSpark() {
         configureMotorSettings();
     }
@@ -30,10 +33,10 @@ public class DriveIOSpark implements DriveIO {
         SparkBaseConfig config = new SparkMaxConfig();
         config.openLoopRampRate(DriveConstants.kRampRateSeconds)
                 .idleMode(IdleMode.kBrake);
-        
+
         config.encoder
-            .positionConversionFactor((2 * Math.PI) / DriveConstants.kMotorReduction)
-            .velocityConversionFactor(((2 * Math.PI) / 60.0) / DriveConstants.kMotorReduction);
+                .positionConversionFactor((2 * Math.PI) / DriveConstants.kMotorReduction)
+                .velocityConversionFactor(((2 * Math.PI) / 60.0) / DriveConstants.kMotorReduction);
 
         config.inverted(DriveConstants.kLeftInverted);
         SparkUtil.tryUntilOk(
@@ -68,12 +71,12 @@ public class DriveIOSpark implements DriveIO {
         inputs.leftPositionRad = leftEncoder.getPosition();
         inputs.leftVelocityRadPerSec = leftEncoder.getVelocity();
         inputs.leftAppliedVolts = leftLeader.getBusVoltage() * leftLeader.getAppliedOutput();
-        inputs.leftCurrentAmps = new double[] {leftLeader.getOutputCurrent(), leftFollower.getOutputCurrent()};
-        
+        inputs.leftCurrentAmps = new double[] { leftLeader.getOutputCurrent(), leftFollower.getOutputCurrent() };
+
         inputs.rightPositionRad = rightEncoder.getPosition();
         inputs.rightVelocityRadPerSec = rightEncoder.getVelocity();
         inputs.rightAppliedVolts = rightLeader.getBusVoltage() * rightLeader.getAppliedOutput();
-        inputs.rightCurrentAmps = new double[] {rightLeader.getOutputCurrent(),rightFollower.getOutputCurrent()};
+        inputs.rightCurrentAmps = new double[] { rightLeader.getOutputCurrent(), rightFollower.getOutputCurrent() };
     }
 
     @Override
@@ -84,7 +87,10 @@ public class DriveIOSpark implements DriveIO {
 
     @Override
     public void setVelocity(double leftRadPerSec, double rightRadPerSec) {
-        leftController.setReference(leftRadPerSec, ControlType.kVelocity);
-        rightController.setReference(rightRadPerSec, ControlType.kVelocity);
+        // leftController.setReference(leftRadPerSec, ControlType.kVelocity);
+        // rightController.setReference(rightRadPerSec, ControlType.kVelocity);
+        leftLeader.set(leftRadPerSec);
+        rightLeader.set(rightRadPerSec);
     }
+
 }

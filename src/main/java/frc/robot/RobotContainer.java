@@ -7,6 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.controllers.CommandCustomXboxController;
+import frc.robot.subsystems.coral.CoralIOSpark;
+import frc.robot.subsystems.coral.CoralSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 
 public class RobotContainer {
@@ -16,6 +18,7 @@ public class RobotContainer {
       Constants.XboxDriverControllerPort);
 
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  private final CoralSubsystem coralSubsystem = new CoralSubsystem(new CoralIOSpark());
 
   public RobotContainer() {
     configureBindings();
@@ -28,10 +31,8 @@ public class RobotContainer {
         .setDefaultCommand(
             driveSubsystem.driveCommand(() -> -driveController.getLeftY(), () -> -driveController.getRightX()));
 
-    // driveController.a().whileFalse(null);
+    driveController.rightBumper().whileTrue(coralSubsystem.runCoral(10.0));
 
-    // driveController.rightBumper().whileTrue(driveSubsystem.driveCommand(() ->
-    // 1.0, () -> 0.0));
   }
 
   public Command getAutonomousCommand() {

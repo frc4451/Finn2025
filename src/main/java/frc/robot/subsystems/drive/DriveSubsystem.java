@@ -31,20 +31,13 @@ public class DriveSubsystem implements Subsystem {
 
     /** Command for controlling to drivetrain */
     public Command driveCommand(DoubleSupplier forward, DoubleSupplier rotation) {
-
         return Commands.run(() -> {
-
             WheelSpeeds speeds;
-
             if (forward.getAsDouble() > ControllerConstants.kJoystickDeadband
                     && forward.getAsDouble() < -ControllerConstants.kJoystickDeadband) {
-
                 speeds = DifferentialDrive.curvatureDriveIK(forward.getAsDouble(), rotation.getAsDouble(), false);
-
             } else {
-
                 speeds = DifferentialDrive.curvatureDriveIK(forward.getAsDouble(), rotation.getAsDouble(), true);
-
             }
             runClosedLoop(speeds.left, speeds.right);
         }, this);

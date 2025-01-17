@@ -14,31 +14,31 @@ import frc.robot.util.SparkUtil;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class CoralIOSpark implements CoralIO {
-
+        /**Creates the coralMotor and Encoder objects */
     private final SparkMax coralMotor = new SparkMax(CoralConstants.kCoralMotorId, CoralConstants.kCoralMotorType);
     private final RelativeEncoder coralEncoder = coralMotor.getEncoder();
-
     public CoralIOSpark() {
         configureCoralSettings();
     }
 
+    /**Configures motor settings for coral motor, can be tweaked for some tuning if needed (Needed) */
     private void configureCoralSettings() {
         SparkMaxConfig config = new SparkMaxConfig();
         config.idleMode(IdleMode.kBrake)
-                .smartCurrentLimit(0)
+                .smartCurrentLimit(12)
                 .voltageCompensation(12.0);
         config.encoder
-                .uvwMeasurementPeriod(20)
+                .uvwMeasurementPeriod(CoralConstants.kUpdatePeriodMilliseconds)
                 .uvwAverageDepth(2);
         config.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                 .pidf(CoralConstants.kDriveKp, 0, CoralConstants.kDriveKd, 0);
         config.signals
-                .primaryEncoderPositionPeriodMs(20)
-                .primaryEncoderVelocityPeriodMs(20)
-                .appliedOutputPeriodMs(20)
-                .busVoltagePeriodMs(20)
-                .outputCurrentPeriodMs(20);
+                .primaryEncoderPositionPeriodMs(CoralConstants.kUpdatePeriodMilliseconds)
+                .primaryEncoderVelocityPeriodMs(CoralConstants.kUpdatePeriodMilliseconds)
+                .appliedOutputPeriodMs(CoralConstants.kUpdatePeriodMilliseconds)
+                .busVoltagePeriodMs(CoralConstants.kUpdatePeriodMilliseconds)
+                .outputCurrentPeriodMs(CoralConstants.kUpdatePeriodMilliseconds);
         SparkUtil.tryUntilOk(
                 coralMotor,
                 5,

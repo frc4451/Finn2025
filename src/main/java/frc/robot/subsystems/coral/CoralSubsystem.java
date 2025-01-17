@@ -23,6 +23,7 @@ public class CoralSubsystem extends SubsystemBase {
         }
     }
 
+    /**Using direct voltage control because why not*/
     public Command runCoral(double inputVolts) {
         return startEnd(() -> io.runVolts(inputVolts), () -> io.stop());
     }

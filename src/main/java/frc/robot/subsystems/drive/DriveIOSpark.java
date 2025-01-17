@@ -12,6 +12,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import frc.robot.util.SparkUtil;
 
 public class DriveIOSpark implements DriveIO {
+    /** Creates different objects for all the motors, and encoder and controller objects for the lead motors */
         private final SparkMax leftLeader = new SparkMax(DriveConstants.kFrontLeftId, DriveConstants.kMotorType);
         private final SparkMax rightLeader = new SparkMax(DriveConstants.kFrontRightId, DriveConstants.kMotorType);
         private final SparkMax leftFollower = new SparkMax(DriveConstants.kBackLeftId, DriveConstants.kMotorType);
@@ -24,15 +25,19 @@ public class DriveIOSpark implements DriveIO {
         public DriveIOSpark() {
                 configureMotorSettings();
         }
-
+        
+        /** Configures Motor settings. Try until ok exists because of Rev Hardware bug that makes it so sometimes they just don't apply the config and they just won't work */
         private void configureMotorSettings() {
                 SparkBaseConfig config = new SparkMaxConfig();
                 config.openLoopRampRate(DriveConstants.kRampRateSeconds)
-                                .idleMode(IdleMode.kBrake);
-
+                                .idleMode(IdleMode.kBrake)
+                                .voltageCompensation(12.0);
+                config.closedLoop.pidf(DriveConstants.kMotorKp, DriveConstants.kMotorKi, DriveConstants.kMotorKd, DriveConstants.kMotorKf);
                 config.encoder
                                 .positionConversionFactor((2 * Math.PI) / DriveConstants.kMotorReduction)
-                                .velocityConversionFactor(((2 * Math.PI) / 60.0) / DriveConstants.kMotorReduction);
+                                .velocityConversionFactor(((2 * Math.PI) / 60.0) / DriveConstants.kMotorReduction)
+                                .uvwMeasurementPeriod(20)
+                                .uvwAverageDepth(2);
 
                 config.inverted(DriveConstants.kLeftInverted);
                 SparkUtil.tryUntilOk(

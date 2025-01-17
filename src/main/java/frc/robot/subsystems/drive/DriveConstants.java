@@ -21,4 +21,16 @@ public class DriveConstants {
     public static final double kTrackWidthMeters = Units.inchesToMeters(26.0);
     public static final double kWheelRadiusMeters = Units.inchesToMeters(6.0);
     public static final double kMotorReduction = 1.0;
+    
+    /**Real values for PIDF */
+    public static final double kMotorKp = 0.0;
+    public static final double kMotorKi = 0.0;
+    public static final double kMotorKd = 0.0;
+    public static final double kMotorKf = 0.0;
+
+    /**Sim values for PID */
+    public static final double kSimKp = 0.0;
+    public static final double kSimKi = 0.0;
+    public static final double kSimKd = 0.0; 
+
 }

@@ -9,4 +9,5 @@ public class CoralConstants {
     public static final MotorType kCoralMotorType = MotorType.kBrushless;
     public static final double kDriveKp = 0.0;
     public static final double kDriveKd = 0.0;
+    public static final int kUpdatePeriodMilliseconds = 20;
 }

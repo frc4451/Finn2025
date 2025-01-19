@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.controllers.CommandCustomXboxController;
 import frc.robot.subsystems.coral.CoralIO;
+import frc.robot.subsystems.coral.CoralIOSim;
 import frc.robot.subsystems.coral.CoralIOSpark;
 import frc.robot.subsystems.coral.CoralSubsystem;
 import frc.robot.subsystems.drive.DriveIO;
@@ -38,7 +39,7 @@ public class RobotContainer {
         driveSubsystem = new DriveSubsystem(new DriveIOSim(), new GyroIO() {
 
         });
-        coralSubsystem = new CoralSubsystem(new CoralIO() {
+        coralSubsystem = new CoralSubsystem(new CoralIOSim() {
         });
         break;
 

@@ -16,7 +16,7 @@ public class DriveConstants {
     public static final boolean kLeftInverted = true;
     public static final boolean kRightInverted = false;
 
-    public static final MotorType kMotorType = MotorType.kBrushed;
+    public static final MotorType kMotorType = MotorType.kBrushless;
 
     public static final double kTrackWidthMeters = Units.inchesToMeters(26.0);
     public static final double kWheelRadiusMeters = Units.inchesToMeters(6.0);

@@ -25,7 +25,9 @@ public interface DriveIO {
     }
 
     public default void setVelocity(double leftRadPerSec, double rightRadPerSec) {
+    }
 
+    public default void setDutyCycle(double leftOut, double rightOut) {
     }
 
     public default void stop() {

@@ -46,7 +46,9 @@ public class DriveSubsystem implements Subsystem {
     @Override
     public void periodic() {
         driveIO.updateInputs(inputs);
+        gyroIO.updateInputs(gyroInputs);
         Logger.processInputs("Drive", inputs);
+        Logger.processInputs("Drive/Gyro", gyroInputs);
         if (DriverStation.isDisabled()) {
             driveIO.stop();
         }
@@ -98,21 +100,28 @@ public class DriveSubsystem implements Subsystem {
         double leftRadPerSec = leftMetersPerSec / DriveConstants.kWheelRadiusMeters;
         double rightRadPerSec = rightMetersPerSec / DriveConstants.kWheelRadiusMeters;
         Logger.recordOutput("DriveSubsystem/Setpoint/LeftRadPerSec", leftRadPerSec);
-        Logger.recordOutput("DriveSubsystem/Setpoint/RightRadPerSec", rightRadPerSec);
+        Logger.recordOutput("DriveSubsystem/Setpoint/RightRadPerSec",
+                rightRadPerSec);
         driveIO.setVelocity(leftRadPerSec, rightRadPerSec);
+    }
+
+    private void runDutyCycle(double leftOut, double rightOut) {
+        driveIO.setDutyCycle(leftOut, rightOut);
     }
 
     /** Command for controlling to drivetrain */
     public Command driveCommand(DoubleSupplier forward, DoubleSupplier rotation) {
         return Commands.run(() -> {
             WheelSpeeds speeds;
-            if (forward.getAsDouble() > ControllerConstants.kJoystickDeadband
-                    && forward.getAsDouble() < -ControllerConstants.kJoystickDeadband) {
+            if (Math.abs(forward.getAsDouble()) > ControllerConstants.kJoystickDeadband) {
                 speeds = DifferentialDrive.curvatureDriveIK(forward.getAsDouble(), rotation.getAsDouble(), false);
             } else {
                 speeds = DifferentialDrive.curvatureDriveIK(forward.getAsDouble(), rotation.getAsDouble(), true);
             }
-            runClosedLoop(speeds.left, speeds.right);
+            runDutyCycle(speeds.left, speeds.right);
+            // runClosedLoop(speeds.left * DriveConstants.kMaxSpeed, speeds.right *
+            // DriveConstants.kMaxSpeed);
+            System.out.println(getLeftVelocityMetersPerSecond());
         }, this);
     }
 }

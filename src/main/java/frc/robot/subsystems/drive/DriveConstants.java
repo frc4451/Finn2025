@@ -1,7 +1,10 @@
 package frc.robot.subsystems.drive;
 
+import com.pathplanner.lib.config.ModuleConfig;
+import com.pathplanner.lib.config.RobotConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 
 public class DriveConstants {
@@ -19,7 +22,7 @@ public class DriveConstants {
     public static final MotorType kMotorType = MotorType.kBrushless;
 
     public static final double kTrackWidthMeters = Units.inchesToMeters(21.5);
-    public static final double kWheelRadiusMeters = Units.inchesToMeters(6.0);
+    public static final double kWheelRadiusMeters = Units.inchesToMeters(3.0);
     public static final double kMotorReduction = 8.45;
 
     public static final double kMaxSpeed = 2.0;
@@ -35,4 +38,21 @@ public class DriveConstants {
     public static final double kSimKi = 0.0;
     public static final double kSimKd = 0.0;
 
+    public static final DCMotor kGearbox = DCMotor.getNEO(2);
+    public static final double kRobotMassKg = 50;
+    public static final double kRobotMOI = 6.8;
+    public static final double kWheelCOF = 1.2;
+    public static final int kCurrentLimit = 60;
+
+    public static final RobotConfig ppConfig = new RobotConfig(
+            kRobotMassKg,
+            kRobotMOI,
+            new ModuleConfig(
+                    kWheelRadiusMeters,
+                    kMaxSpeed,
+                    kWheelCOF,
+                    kGearbox.withReduction(kMotorReduction),
+                    kCurrentLimit,
+                    2),
+            kTrackWidthMeters);
 }

@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.controllers.CommandCustomXboxController;
@@ -26,6 +31,8 @@ public class RobotContainer {
 
   private final DriveSubsystem driveSubsystem;
   private final CoralSubsystem coralSubsystem;
+
+  private final LoggedDashboardChooser<Command> autoChooser;
 
   public RobotContainer() {
 
@@ -53,6 +60,8 @@ public class RobotContainer {
         });
         break;
     }
+    NamedCommands.registerCommand("Score", coralSubsystem.runCoral(6.0).withTimeout(1.0));
+    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     configureBindings();
   }
@@ -62,13 +71,16 @@ public class RobotContainer {
     // sets the default command for the drive train
     driveSubsystem
         .setDefaultCommand(
-            driveSubsystem.driveCommand(() -> -driveController.getLeftY(), () -> -driveController.getRightX()));
+            driveSubsystem.driveCommand(() -> -driveController.getLeftY() / 3, () -> -driveController.getRightX() / 3));
 
-    driveController.rightBumper().whileTrue(coralSubsystem.runCoral(10.0));
+    driveController.rightBumper().whileTrue(coralSubsystem.runCoral(6.0));
+    driveController.leftBumper().whileTrue(coralSubsystem.runCoral(9.0));
+    driveController.a().whileTrue(coralSubsystem.runCoral(-6.0));
+    driveController.b().whileTrue(coralSubsystem.runCoral(12.0));
 
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return autoChooser.get();
   }
 }

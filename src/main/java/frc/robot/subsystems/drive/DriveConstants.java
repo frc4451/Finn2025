@@ -8,51 +8,51 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 
 public class DriveConstants {
-    public static final int kFrontLeftId = 1;
-    public static final int kFrontRightId = 2;
-    public static final int kBackLeftId = 3;
-    public static final int kBackRightId = 4;
-    public static final int kPigeonId = 6;
+        public static final int kFrontLeftId = 1;
+        public static final int kFrontRightId = 2;
+        public static final int kBackLeftId = 3;
+        public static final int kBackRightId = 4;
+        public static final int kPigeonId = 6;
 
-    public static final double kRampRateSeconds = 0.3;
+        public static final double kRampRateSeconds = 1.0;
 
-    public static final boolean kLeftInverted = false;
-    public static final boolean kRightInverted = true;
+        public static final boolean kLeftInverted = false;
+        public static final boolean kRightInverted = true;
 
-    public static final MotorType kMotorType = MotorType.kBrushless;
+        public static final MotorType kMotorType = MotorType.kBrushless;
 
-    public static final double kTrackWidthMeters = Units.inchesToMeters(21.5);
-    public static final double kWheelRadiusMeters = Units.inchesToMeters(3.0);
-    public static final double kMotorReduction = 8.45;
+        public static final double kTrackWidthMeters = Units.inchesToMeters(21.5);
+        public static final double kWheelRadiusMeters = Units.inchesToMeters(3.0);
+        public static final double kMotorReduction = 8.45;
 
-    public static final double kMaxSpeed = 2.0;
+        public static final double kMaxSpeed = 2.0;
 
-    /** Real values for PIDF */
-    public static final double kMotorKp = 0.0;
-    public static final double kMotorKi = 0.0;
-    public static final double kMotorKd = 0.0;
-    public static final double kMotorKf = 0.05;
+        /** Real values for PIDF */
+        public static final double kMotorKp = 0.0;
+        public static final double kMotorKi = 0.0;
+        public static final double kMotorKd = 0.0;
+        public static final double kMotorKf = 0.05;
 
-    /** Sim values for PID */
-    public static final double kSimKp = 0.44;
-    public static final double kSimKi = 0.0;
-    public static final double kSimKd = 0.0;
+        /** Sim values for PID */
+        public static final double kSimKp = 0.44;
+        public static final double kSimKi = 0.0;
+        public static final double kSimKd = 0.0;
 
-    public static final DCMotor kGearbox = DCMotor.getNEO(2);
-    public static final double kRobotMassKg = 50;
-    public static final double kRobotMOI = 6.8;
-    public static final double kWheelCOF = 1.2;
-    public static final int kCurrentLimit = 60;
+        public static final DCMotor kGearbox = DCMotor.getNEO(2);
+        public static final double kRobotMassKg = 50;
+        public static final double kRobotMOI = 6.8;
+        public static final double kWheelCOF = 1.2;
+        public static final int kCurrentLimit = 60;
 
-    public static final RobotConfig ppConfig = new RobotConfig(
-            kRobotMassKg,
-            kRobotMOI,
-            new ModuleConfig(
-                    kWheelRadiusMeters,
-                    kMaxSpeed,
-                    kWheelCOF,
-                    kGearbox.withReduction(kMotorReduction),
-                    kCurrentLimit,
-                    2),
-            kTrackWidthMeters);
+        public static final RobotConfig ppConfig = new RobotConfig(
+                        kRobotMassKg,
+                        kRobotMOI,
+                        new ModuleConfig(
+                                        kWheelRadiusMeters,
+                                        kMaxSpeed,
+                                        kWheelCOF,
+                                        kGearbox.withReduction(kMotorReduction),
+                                        kCurrentLimit,
+                                        2),
+                        kTrackWidthMeters);
 }

@@ -77,6 +77,16 @@ public class DriveIOSpark implements DriveIO {
                                 () -> rightFollower.configure(config, ResetMode.kResetSafeParameters,
                                                 PersistMode.kPersistParameters));
 
+                SparkUtil.tryUntilOk(
+                                leftLeader,
+                                5,
+                                () -> leftEncoder.setPosition(0));
+
+                SparkUtil.tryUntilOk(
+                                rightLeader,
+                                5,
+                                () -> rightEncoder.setPosition(0));
+
         }
 
         @Override

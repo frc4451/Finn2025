@@ -73,6 +73,7 @@ public class DriveSubsystem implements Subsystem {
         PathPlannerLogging.setLogTargetPoseCallback(
                 targetPose -> Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose));
 
+        setPose(Pose2d.kZero);
     }
 
     @Override
@@ -150,23 +151,19 @@ public class DriveSubsystem implements Subsystem {
         driveIO.setDutyCycle(leftOut, rightOut);
     }
 
-    private double setNeg(double a) {
-        if (a < 0) {
-            return -a;
-        }
-        return a;
-    }
-
     /** Command for controlling to drivetrain */
     public Command driveCommand(DoubleSupplier forward, DoubleSupplier rotation) {
         return Commands.run(() -> {
             WheelSpeeds speeds;
-            if (Math.abs(forward.getAsDouble()) > ControllerConstants.kJoystickDeadband) {
-                speeds = DifferentialDrive.curvatureDriveIK(forward.getAsDouble(),
-                        rotation.getAsDouble() * setNeg(rotation.getAsDouble()), false);
+            if (forward.getAsDouble() != 0) {
+                speeds = DifferentialDrive.curvatureDriveIK(
+                        forward.getAsDouble() * Math.abs(forward.getAsDouble()),
+                        rotation.getAsDouble() * Math.abs(rotation.getAsDouble()) / 2, false);
             } else {
-                speeds = DifferentialDrive.curvatureDriveIK(forward.getAsDouble() * (rotation.getAsDouble()),
-                        rotation.getAsDouble() * setNeg(rotation.getAsDouble()), true);
+                speeds = DifferentialDrive.arcadeDriveIK(
+                        0,
+                        rotation.getAsDouble(),
+                        true);
 
             }
             runClosedLoop(

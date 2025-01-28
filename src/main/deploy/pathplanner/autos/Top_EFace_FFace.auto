@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TopToFFace1"
+            "pathName": "TopToEFace1"
           }
         },
         {
@@ -17,9 +17,15 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "FFace1ToTopC"
+            "pathName": "EFaceToTopC1"
           }
         },
         {

@@ -10,6 +10,7 @@ import com.pathplanner.lib.controllers.PPLTVController;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -33,6 +34,8 @@ public class DriveSubsystem implements Subsystem {
 
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final GyroIO gyroIO;
+
+    private final PIDController drivePID = new PIDController(1.0, 0.0, 0.0);
 
     private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(
             DriveConstants.kTrackWidthMeters);
@@ -147,14 +150,24 @@ public class DriveSubsystem implements Subsystem {
         driveIO.setDutyCycle(leftOut, rightOut);
     }
 
+    private double setNeg(double a) {
+        if (a < 0) {
+            return -a;
+        }
+        return a;
+    }
+
     /** Command for controlling to drivetrain */
     public Command driveCommand(DoubleSupplier forward, DoubleSupplier rotation) {
         return Commands.run(() -> {
             WheelSpeeds speeds;
             if (Math.abs(forward.getAsDouble()) > ControllerConstants.kJoystickDeadband) {
-                speeds = DifferentialDrive.curvatureDriveIK(forward.getAsDouble(), rotation.getAsDouble(), false);
+                speeds = DifferentialDrive.curvatureDriveIK(forward.getAsDouble(),
+                        rotation.getAsDouble() * setNeg(rotation.getAsDouble()), false);
             } else {
-                speeds = DifferentialDrive.curvatureDriveIK(forward.getAsDouble(), rotation.getAsDouble(), true);
+                speeds = DifferentialDrive.curvatureDriveIK(forward.getAsDouble() * (rotation.getAsDouble()),
+                        rotation.getAsDouble() * setNeg(rotation.getAsDouble()), true);
+
             }
             runClosedLoop(
                     speeds.left * DriveConstants.kMaxSpeed,

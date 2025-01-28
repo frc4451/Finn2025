@@ -9,6 +9,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.controllers.CommandCustomXboxController;
@@ -71,11 +72,10 @@ public class RobotContainer {
     // sets the default command for the drive train
     driveSubsystem
         .setDefaultCommand(
-            driveSubsystem.driveCommand(() -> -driveController.getLeftY() / 3, () -> -driveController.getRightX() / 3));
+            driveSubsystem.driveCommand(() -> -driveController.getLeftY(), () -> -driveController.getRightX()));
 
-    driveController.rightBumper().whileTrue(coralSubsystem.runCoral(6.0));
-    driveController.leftBumper().whileTrue(coralSubsystem.runCoral(9.0));
-    driveController.a().whileTrue(coralSubsystem.runCoral(-6.0));
+    driveController.rightTrigger().whileTrue(coralSubsystem.runCoral(6.0));
+    driveController.leftTrigger().whileTrue(coralSubsystem.runCoral(-6.0));
     driveController.b().whileTrue(coralSubsystem.runCoral(12.0));
 
   }

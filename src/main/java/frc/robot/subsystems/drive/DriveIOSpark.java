@@ -1,6 +1,7 @@
 package frc.robot.subsystems.drive;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -111,9 +112,10 @@ public class DriveIOSpark implements DriveIO {
         }
 
         @Override
-        public void setVelocity(double leftRadPerSec, double rightRadPerSec) {
-                leftController.setReference(leftRadPerSec, ControlType.kVelocity);
-                rightController.setReference(rightRadPerSec, ControlType.kVelocity);
+        public void setVelocity(double leftRadPerSec, double rightRadPerSec, double leftFFVolts, double rightFFVolts) {
+                leftController.setReference(leftRadPerSec, ControlType.kVelocity, ClosedLoopSlot.kSlot0, leftFFVolts);
+                rightController.setReference(rightRadPerSec, ControlType.kVelocity, ClosedLoopSlot.kSlot0,
+                                rightFFVolts);
         }
 
         @Override

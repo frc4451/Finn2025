@@ -66,6 +66,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Score", coralSubsystem.runCoral(6.0).withTimeout(1.0));
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
+    autoChooser.addOption("[Characterization] FeedForward", driveSubsystem.feedforwardCharacterization());
+
     configureBindings();
   }
 

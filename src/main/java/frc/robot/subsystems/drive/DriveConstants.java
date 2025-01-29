@@ -32,11 +32,16 @@ public class DriveConstants {
         public static final double kMotorKi = 0.0;
         public static final double kMotorKd = 0.0;
         public static final double kMotorKf = 0.05;
+        public static final double kMotorKs = 0.0;
+        public static final double kMotorKv = 0.0;
 
         /** Sim values for PID */
         public static final double kSimKp = 0.44;
         public static final double kSimKi = 0.0;
         public static final double kSimKd = 0.0;
+
+        public static final double kSimKs = 0.0;
+        public static final double kSimKv = 0.0;
 
         public static final DCMotor kGearbox = DCMotor.getNEO(2);
         public static final double kRobotMassKg = 50;
@@ -55,4 +60,8 @@ public class DriveConstants {
                                         kCurrentLimit,
                                         2),
                         kTrackWidthMeters);
+
+        /** Characterization Constants */
+        /** FeedForward Ramp Rate; Stolen from AdvantageKit */
+        public static final double FF_RAMP_RATE = 0.1; // Volts/Sec
 }

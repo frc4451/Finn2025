@@ -18,14 +18,17 @@ public class DriveIOSim implements DriveIO {
             DriveConstants.kSimKd);
     private PIDController rightPID = new PIDController(DriveConstants.kSimKp, DriveConstants.kSimKi,
             DriveConstants.kSimKd);
+    private double leftFFVolts = 0.0;
+    private double rightFFVolts = 0.0;
 
     private boolean closedLoop = false;
 
     @Override
     public void updateInputs(DriveIOInputs inputs) {
         if (closedLoop) {
-            double left = leftPID.calculate(sim.getLeftVelocityMetersPerSecond() * DriveConstants.kWheelRadiusMeters);
-            double right = rightPID
+            double left = leftFFVolts
+                    + leftPID.calculate(sim.getLeftVelocityMetersPerSecond() * DriveConstants.kWheelRadiusMeters);
+            double right = rightFFVolts + rightPID
                     .calculate(sim.getRightVelocityMetersPerSecond() * DriveConstants.kWheelRadiusMeters);
 
             runVolts(left, right);
@@ -52,13 +55,15 @@ public class DriveIOSim implements DriveIO {
 
     @Override
     public void setVoltage(double leftVolts, double rightVolts) {
-        closedLoop = true;
+        closedLoop = false;
         runVolts(leftVolts, rightVolts);
     }
 
     @Override
-    public void setVelocity(double leftRadPerSec, double rightRadPerSec) {
+    public void setVelocity(double leftRadPerSec, double rightRadPerSec, double leftFFVolts, double rightFFVolts) {
         closedLoop = true;
+        this.leftFFVolts = leftFFVolts;
+        this.rightFFVolts = rightFFVolts;
         leftPID.setSetpoint(leftRadPerSec);
         rightPID.setSetpoint(rightRadPerSec);
     }

@@ -1,5 +1,9 @@
 package frc.robot.subsystems.drive;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -20,11 +24,14 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
+import frc.robot.Constants.Mode;
 import frc.robot.controllers.ControllerConstants;
 import frc.robot.util.LocalADStarAK;
 
@@ -39,6 +46,8 @@ public class DriveSubsystem implements Subsystem {
 
     private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(
             DriveConstants.kTrackWidthMeters);
+    private final double kS = Constants.currentMode == Mode.SIM ? DriveConstants.kSimKs : DriveConstants.kMotorKs;
+    private final double kV = Constants.currentMode == Mode.SIM ? DriveConstants.kSimKv : DriveConstants.kMotorKv;
     private final DifferentialDrivePoseEstimator poseEstimator = new DifferentialDrivePoseEstimator(
             kinematics,
             new Rotation2d(),
@@ -144,7 +153,11 @@ public class DriveSubsystem implements Subsystem {
         Logger.recordOutput("DriveSubsystem/Setpoint/LeftRadPerSec", leftRadPerSec);
         Logger.recordOutput("DriveSubsystem/Setpoint/RightRadPerSec",
                 rightRadPerSec);
-        driveIO.setVelocity(leftRadPerSec, rightRadPerSec);
+
+        double leftFFVolts = kS * Math.signum(leftRadPerSec) + kV * leftRadPerSec;
+        double rightFFVolts = kS * Math.signum(rightRadPerSec) + kV * rightRadPerSec;
+
+        driveIO.setVelocity(leftRadPerSec, rightRadPerSec, leftFFVolts, rightFFVolts);
     }
 
     private void runDutyCycle(double leftOut, double rightOut) {
@@ -171,4 +184,66 @@ public class DriveSubsystem implements Subsystem {
                     speeds.right * DriveConstants.kMaxSpeed);
         }, this);
     }
+
+    /** Runs the drive in open loop. */
+    public void runOpenLoop(double leftVolts, double rightVolts) {
+        this.driveIO.setVoltage(leftVolts, rightVolts);
+    }
+
+    /** Returns the average velocity in radians/second. */
+    public double getCharacterizationVelocity() {
+        return (this.inputs.leftVelocityRadPerSec + this.inputs.rightVelocityRadPerSec) / 2.0;
+    }
+
+    /** Measures the velocity feedforward constants for the drive. */
+    public Command feedforwardCharacterization() {
+        List<Double> velocitySamples = new LinkedList<>();
+        List<Double> voltageSamples = new LinkedList<>();
+        Timer timer = new Timer();
+
+        return Commands.sequence(
+                // Reset data
+                Commands.runOnce(
+                        () -> {
+                            velocitySamples.clear();
+                            voltageSamples.clear();
+                            timer.restart();
+                        }),
+
+                // Accelerate and gather data
+                Commands.run(
+                        () -> {
+                            double voltage = timer.get() * DriveConstants.FF_RAMP_RATE;
+                            this.runOpenLoop(voltage, voltage);
+                            velocitySamples.add(this.getCharacterizationVelocity());
+                            voltageSamples.add(voltage);
+
+                            Logger.recordOutput("DriveFeedForward", voltage);
+                        },
+                        this)
+
+                        // When cancelled, calculate and print results
+                        .finallyDo(
+                                () -> {
+                                    int n = velocitySamples.size();
+                                    double sumX = 0.0;
+                                    double sumY = 0.0;
+                                    double sumXY = 0.0;
+                                    double sumX2 = 0.0;
+                                    for (int i = 0; i < n; i++) {
+                                        sumX += velocitySamples.get(i);
+                                        sumY += voltageSamples.get(i);
+                                        sumXY += velocitySamples.get(i) * voltageSamples.get(i);
+                                        sumX2 += velocitySamples.get(i) * velocitySamples.get(i);
+                                    }
+                                    double kS = (sumY * sumX2 - sumX * sumXY) / (n * sumX2 - sumX * sumX);
+                                    double kV = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+
+                                    NumberFormat formatter = new DecimalFormat("#0.00000");
+                                    System.out.println("********** Drive FF Characterization Results **********");
+                                    System.out.println("\tkS: " + formatter.format(kS));
+                                    System.out.println("\tkV: " + formatter.format(kV));
+                                }));
+    }
+
 }

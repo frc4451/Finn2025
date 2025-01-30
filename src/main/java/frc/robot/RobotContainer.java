@@ -63,7 +63,7 @@ public class RobotContainer {
         });
         break;
     }
-    NamedCommands.registerCommand("Score", coralSubsystem.runCoral(6.0).withTimeout(1.0));
+    NamedCommands.registerCommand("Score", coralSubsystem.runCoral(6.0).withTimeout(1));
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     autoChooser.addOption("[Characterization] FeedForward", driveSubsystem.feedforwardCharacterization());

@@ -32,7 +32,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
-import frc.robot.controllers.ControllerConstants;
 import frc.robot.util.LocalADStarAK;
 
 public class DriveSubsystem implements Subsystem {
@@ -66,10 +65,7 @@ public class DriveSubsystem implements Subsystem {
         AutoBuilder.configure(
                 this::getPose,
                 this::setPose,
-                () -> kinematics.toChassisSpeeds(
-                        new DifferentialDriveWheelSpeeds(
-                                getLeftVelocityMetersPerSecond(),
-                                getRightVelocityMetersPerSecond())),
+                this::getRobotRelativeSpeeds,
                 (ChassisSpeeds speeds) -> runClosedLoop(speeds),
                 new PPLTVController(0.02, DriveConstants.kMaxSpeed),
                 DriveConstants.ppConfig,
@@ -129,6 +125,14 @@ public class DriveSubsystem implements Subsystem {
     }
 
     @AutoLogOutput
+    public ChassisSpeeds getRobotRelativeSpeeds() {
+        return kinematics.toChassisSpeeds(
+                new DifferentialDriveWheelSpeeds(
+                        getLeftVelocityMetersPerSecond(),
+                        getRightVelocityMetersPerSecond()));
+    }
+
+    @AutoLogOutput
     public double getLeftVelocityMetersPerSecond() {
         return inputs.leftVelocityRadPerSec * DriveConstants.kWheelRadiusMeters;
     }
@@ -139,8 +143,9 @@ public class DriveSubsystem implements Subsystem {
     }
 
     public void runClosedLoop(ChassisSpeeds speeds) {
+        Logger.recordOutput("DriveSubsystem/A", speeds);
         DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(speeds);
-        runClosedLoop(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond);
+        runClosedLoop(speeds.vxMetersPerSecond, speeds.vxMetersPerSecond);
     }
 
     /**

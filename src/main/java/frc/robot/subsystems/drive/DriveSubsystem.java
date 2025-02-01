@@ -248,6 +248,9 @@ public class DriveSubsystem implements Subsystem {
                                     System.out.println("********** Drive FF Characterization Results **********");
                                     System.out.println("\tkS: " + formatter.format(kS));
                                     System.out.println("\tkV: " + formatter.format(kV));
+                                    Logger.recordOutput("DriveSubsystem/kS", kS);
+                                    Logger.recordOutput("DriveSubsystem/kV", kV);
+
                                 }));
     }
 

@@ -38,8 +38,10 @@ public class DriveIOSpark implements DriveIO {
         private void configureMotorSettings() {
                 SparkBaseConfig config = new SparkMaxConfig();
                 config.openLoopRampRate(DriveConstants.kRampRateSeconds)
+                                .closedLoopRampRate(DriveConstants.kRampRateSeconds)
                                 .idleMode(IdleMode.kCoast)
-                                .voltageCompensation(12.0);
+                                .voltageCompensation(12.0)
+                                .smartCurrentLimit(DriveConstants.kCurrentLimit);
                 config.closedLoop.pidf(DriveConstants.kMotorKp, DriveConstants.kMotorKi, DriveConstants.kMotorKd,
                                 DriveConstants.kMotorKf);
                 config.encoder

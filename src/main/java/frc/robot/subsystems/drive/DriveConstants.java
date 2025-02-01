@@ -33,8 +33,8 @@ public class DriveConstants {
         public static final double kMotorKd = 0.0;
 
         public static final double kMotorKf = 0.05;
-        public static final double kMotorKs = 0.15313;
-        public static final double kMotorKv = 0.17835;
+        public static final double kMotorKs = 0.176;
+        public static final double kMotorKv = 0.177;
 
         /** Sim values for PID */
         public static final double kSimKp = 0.44;
@@ -48,7 +48,7 @@ public class DriveConstants {
         public static final double kRobotMassKg = 50;
         public static final double kRobotMOI = 6.8;
         public static final double kWheelCOF = 1.2;
-        public static final int kCurrentLimit = 60;
+        public static final int kCurrentLimit = 40;
 
         public static final RobotConfig ppConfig = new RobotConfig(
                         kRobotMassKg,

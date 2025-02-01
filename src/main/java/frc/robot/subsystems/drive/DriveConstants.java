@@ -25,14 +25,14 @@ public class DriveConstants {
         public static final double kWheelRadiusMeters = Units.inchesToMeters(3.0);
         public static final double kMotorReduction = 8.45;
 
-        public static final double kMaxSpeed = 3.0;
+        public static final double kMaxSpeed = 5.2;
 
         /** Real values for PIDF */
         public static final double kMotorKp = 0.0;
         public static final double kMotorKi = 0.0;
         public static final double kMotorKd = 0.0;
 
-        public static final double kMotorKf = 0.05;
+        public static final double kMotorKf = 0.00;
         public static final double kMotorKs = 0.176;
         public static final double kMotorKv = 0.177;
 

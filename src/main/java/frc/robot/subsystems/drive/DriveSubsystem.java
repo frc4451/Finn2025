@@ -41,7 +41,7 @@ public class DriveSubsystem implements Subsystem {
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final GyroIO gyroIO;
 
-    private final PIDController drivePID = new PIDController(1.0, 0.0, 0.0);
+    // private final PIDController drivePID = new PIDController(1.0, 0.0, 0.0);
 
     private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(
             DriveConstants.kTrackWidthMeters);
@@ -145,7 +145,7 @@ public class DriveSubsystem implements Subsystem {
     public void runClosedLoop(ChassisSpeeds speeds) {
         Logger.recordOutput("DriveSubsystem/A", speeds);
         DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(speeds);
-        runClosedLoop(speeds.vxMetersPerSecond, speeds.vxMetersPerSecond);
+        runClosedLoop(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond);
     }
 
     /**

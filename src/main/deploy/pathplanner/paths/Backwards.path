@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.7880128205128198,
-        "y": 7.1933974358974355
+        "x": 4.67775641025641,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4485256410256406,
-        "y": 6.460641025641025
+        "x": 7.361169130975549,
+        "y": 7.0
       },
       "isLocked": false,
-      "linkedName": "TopC"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.8590056818181817,
-        "y": 5.775014204545455
+        "x": 1.8292948717948716,
+        "y": 7.0
       },
       "prevControl": {
-        "x": 3.5287493441603726,
-        "y": 6.36328347607216
+        "x": 3.9492497967774582,
+        "y": 7.0
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "FFace1"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -44,7 +44,7 @@
     "velocity": 0,
     "rotation": 0.0
   },
-  "reversed": false,
+  "reversed": true,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,

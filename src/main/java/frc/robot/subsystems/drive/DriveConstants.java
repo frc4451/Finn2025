@@ -1,7 +1,5 @@
 package frc.robot.subsystems.drive;
 
-import com.pathplanner.lib.config.ModuleConfig;
-import com.pathplanner.lib.config.RobotConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -38,30 +36,18 @@ public class DriveConstants {
         public static final double kMotorKv = 0.177;
 
         /** Sim values for PID */
-        public static final double kSimKp = 0.0;
+        public static final double kSimKp = 0.01;
         public static final double kSimKi = 0.0;
         public static final double kSimKd = 0.0;
 
-        public static final double kSimKs = 0.0;
-        public static final double kSimKv = 0.0;
+        public static final double kSimKs = 0.2;
+        public static final double kSimKv = 0.2;
 
         public static final DCMotor kGearbox = DCMotor.getNEO(2);
         public static final double kRobotMassKg = 35;
         public static final double kRobotMOI = 6.8;
         public static final double kWheelCOF = 1.2;
         public static final int kCurrentLimit = 60;
-
-        public static final RobotConfig ppConfig = new RobotConfig(
-                        kRobotMassKg,
-                        kRobotMOI,
-                        new ModuleConfig(
-                                        kWheelRadiusMeters,
-                                        kMaxSpeed,
-                                        kWheelCOF,
-                                        kGearbox.withReduction(kMotorReduction),
-                                        kCurrentLimit,
-                                        2),
-                        kTrackWidthMeters);
 
         /** Characterization Constants */
         /** FeedForward Ramp Rate; Stolen from AdvantageKit */

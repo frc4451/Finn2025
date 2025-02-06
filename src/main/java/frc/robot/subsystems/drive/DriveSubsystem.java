@@ -9,14 +9,8 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.controllers.PPLTVController;
-import com.pathplanner.lib.pathfinding.Pathfinding;
-import com.pathplanner.lib.util.PathPlannerLogging;
-
 import choreo.trajectory.DifferentialSample;
 import edu.wpi.first.math.controller.LTVUnicycleController;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -25,7 +19,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;
@@ -34,7 +27,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
-import frc.robot.util.LocalADStarAK;
 
 public class DriveSubsystem implements Subsystem {
     private final DriveIOInputsAutoLogged inputs = new DriveIOInputsAutoLogged();
@@ -60,34 +52,11 @@ public class DriveSubsystem implements Subsystem {
     private double lastLeftPositionMeters = 0.0;
     private double lastRightPositionMeters = 0.0;
 
-    private final LTVUnicycleController ltvController;
+    private final LTVUnicycleController ltvController = new LTVUnicycleController(0.02, DriveConstants.kMaxSpeed);
 
     public DriveSubsystem(DriveIO driveIO, GyroIO gyroIO) {
         this.driveIO = driveIO;
         this.gyroIO = gyroIO;
-
-        ltvController = new LTVUnicycleController(0.02, DriveConstants.kMaxSpeed);
-        PPLTVController ppltvController = new PPLTVController(0.02,
-                DriveConstants.kMaxSpeed);
-        ppltvController.setEnabled(false);
-
-        AutoBuilder.configure(
-                this::getPose,
-                this::setPose,
-                this::getRobotRelativeSpeeds,
-                (ChassisSpeeds speeds) -> runClosedLoop(speeds),
-                ppltvController,
-                DriveConstants.ppConfig,
-                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
-                this);
-        Pathfinding.setPathfinder(new LocalADStarAK());
-        PathPlannerLogging.setLogActivePathCallback(
-                activePath -> Logger.recordOutput(
-                        "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()])));
-        PathPlannerLogging.setLogTargetPoseCallback(
-                targetPose -> Logger.recordOutput("Odometry/TrajectorySetpoint",
-                        targetPose));
-
         setPose(Pose2d.kZero);
     }
 
@@ -162,11 +131,15 @@ public class DriveSubsystem implements Subsystem {
      * Executes commands given from driveCommand, converts from meters per second to
      * radians per second for velocity
      */
-    private void runClosedLoop(double leftMetersPerSec, double rightMetersPerSec) {
+    public void runClosedLoop(double leftMetersPerSec, double rightMetersPerSec) {
         double leftRadPerSec = leftMetersPerSec / DriveConstants.kWheelRadiusMeters;
+        double leftRotPerMin = leftRadPerSec * (60 / 2 * Math.PI);
         double rightRadPerSec = rightMetersPerSec / DriveConstants.kWheelRadiusMeters;
+        double rightRotPerMin = rightRadPerSec * (60 / 2 * Math.PI);
         Logger.recordOutput("DriveSubsystem/Setpoint/LeftRadPerSec", leftRadPerSec);
         Logger.recordOutput("DriveSubsystem/Setpoint/RightRadPerSec", rightRadPerSec);
+        Logger.recordOutput("DriveSubsystem/LeftRPM", leftRotPerMin);
+        Logger.recordOutput("DriveSubsystem/RightRPM", rightRotPerMin);
 
         double leftFFVolts = (kS * Math.signum(leftRadPerSec)) + (kV * leftRadPerSec);
         double rightFFVolts = (kS * Math.signum(rightRadPerSec)) + (kV * rightRadPerSec);

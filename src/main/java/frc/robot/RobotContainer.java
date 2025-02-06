@@ -4,18 +4,14 @@
 
 package frc.robot;
 
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.controllers.CommandCustomXboxController;
 import frc.robot.subsystems.coral.CoralIO;
 import frc.robot.subsystems.coral.CoralIOSim;
@@ -37,11 +33,10 @@ public class RobotContainer {
   private final DriveSubsystem driveSubsystem;
   private final CoralSubsystem coralSubsystem;
 
-  private final LoggedDashboardChooser<Command> autoChooser;
   private final AutoFactory autoFactory;
+  public final AutoChooser oreoChooser;
 
   public RobotContainer() {
-
     switch (Constants.currentMode) {
       case REAL:
         driveSubsystem = new DriveSubsystem(new DriveIOSpark(), new GyroIOPigeon1());
@@ -66,33 +61,38 @@ public class RobotContainer {
         });
         break;
     }
-    NamedCommands.registerCommand("Score", coralSubsystem.runCoral(6.0).withTimeout(1));
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+
+    oreoChooser = new AutoChooser();
+    // RobotModeTriggers.autonomous().whileTrue(oreoChooser.selectedCommandScheduler());
+
     autoFactory = new AutoFactory(
         driveSubsystem::getPose,
         driveSubsystem::setPose,
         driveSubsystem::followTrajectory,
-        true,
+        false,
         driveSubsystem);
 
-    autoChooser.addOption("[Characterization] FeedForward", driveSubsystem.feedforwardCharacterization());
-    autoChooser.addOption("Choreo Test", oreoTest());
+    SmartDashboard.putData("Auto Choices", oreoChooser);
+
+    // oreoChooser.addCmd("OreoTest", () -> Commands.sequence(
+    // autoFactory.resetOdometry("Test"),
+    // autoFactory.trajectoryCmd("Test")));
+
+    oreoChooser.addCmd("OreoTest", () -> autoFactory.trajectoryCmd("Test"));
 
     configureBindings();
   }
 
-  private Command oreoTest() {
-    return Commands.sequence(
-        autoFactory.resetOdometry("Test"),
-        autoFactory.trajectoryCmd("Test"));
-  };
-
   // *configures the bindings for any controllers */
   private void configureBindings() {
     // sets the default command for the drive train
-    driveSubsystem
-        .setDefaultCommand(
-            driveSubsystem.driveCommand(() -> -driveController.getLeftY(), () -> -driveController.getRightX()));
+    // driveSubsystem
+    // .setDefaultCommand(
+    // driveSubsystem.driveCommand(() -> -driveController.getLeftY(), () ->
+    // -driveController.getRightX()));
+    // driveSubsystem
+    // .setDefaultCommand(
+    // Commands.run(() -> driveSubsystem.runClosedLoop(1, 1), driveSubsystem));
 
     driveController.rightTrigger().whileTrue(coralSubsystem.runCoral(6.0));
     driveController.leftTrigger().whileTrue(coralSubsystem.runCoral(-6.0));
@@ -101,9 +101,5 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(() -> driveSubsystem.setPose(Pose2d.kZero), driveSubsystem)
             .ignoringDisable(true));
 
-  }
-
-  public Command getAutonomousCommand() {
-    return autoChooser.get();
   }
 }

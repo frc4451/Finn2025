@@ -15,6 +15,7 @@ import org.littletonrobotics.urcl.URCL;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
@@ -66,8 +67,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    m_autonomousCommand = m_robotContainer.oreoChooser.selectedCommand();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }

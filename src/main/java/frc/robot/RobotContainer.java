@@ -9,6 +9,8 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import choreo.auto.AutoChooser;
+import choreo.auto.AutoFactory;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -36,6 +38,7 @@ public class RobotContainer {
   private final CoralSubsystem coralSubsystem;
 
   private final LoggedDashboardChooser<Command> autoChooser;
+  private final AutoFactory autoFactory;
 
   public RobotContainer() {
 
@@ -65,11 +68,24 @@ public class RobotContainer {
     }
     NamedCommands.registerCommand("Score", coralSubsystem.runCoral(6.0).withTimeout(1));
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    autoFactory = new AutoFactory(
+        driveSubsystem::getPose,
+        driveSubsystem::setPose,
+        driveSubsystem::followTrajectory,
+        true,
+        driveSubsystem);
 
     autoChooser.addOption("[Characterization] FeedForward", driveSubsystem.feedforwardCharacterization());
+    autoChooser.addOption("Choreo Test", oreoTest());
 
     configureBindings();
   }
+
+  private Command oreoTest() {
+    return Commands.sequence(
+        autoFactory.resetOdometry("Test"),
+        autoFactory.trajectoryCmd("Test"));
+  };
 
   // *configures the bindings for any controllers */
   private void configureBindings() {

@@ -39,11 +39,12 @@ public class DriveIOSpark implements DriveIO {
                 SparkBaseConfig config = new SparkMaxConfig();
                 config.openLoopRampRate(DriveConstants.kRampRateSeconds)
                                 .closedLoopRampRate(DriveConstants.kRampRateSeconds)
-                                .idleMode(IdleMode.kBrake)
+                                .idleMode(IdleMode.kCoast)
                                 .voltageCompensation(12.0)
                                 .smartCurrentLimit(DriveConstants.kCurrentLimit);
-                config.closedLoop.pidf(DriveConstants.kMotorKp, DriveConstants.kMotorKi, DriveConstants.kMotorKd,
-                                DriveConstants.kMotorKf);
+                // config.closedLoop.pidf(DriveConstants.kMotorKp, DriveConstants.kMotorKi,
+                // DriveConstants.kMotorKd,
+                // DriveConstants.kMotorKf);
                 config.encoder
                                 .positionConversionFactor((2 * Math.PI) / DriveConstants.kMotorReduction)
                                 .velocityConversionFactor(((2 * Math.PI) / 60.0) / DriveConstants.kMotorReduction)

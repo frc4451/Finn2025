@@ -14,6 +14,8 @@ import com.pathplanner.lib.controllers.PPLTVController;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+import choreo.trajectory.DifferentialSample;
+import edu.wpi.first.math.controller.LTVUnicycleController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -58,16 +60,23 @@ public class DriveSubsystem implements Subsystem {
     private double lastLeftPositionMeters = 0.0;
     private double lastRightPositionMeters = 0.0;
 
+    private final LTVUnicycleController ltvController;
+
     public DriveSubsystem(DriveIO driveIO, GyroIO gyroIO) {
         this.driveIO = driveIO;
         this.gyroIO = gyroIO;
+
+        ltvController = new LTVUnicycleController(0.02, DriveConstants.kMaxSpeed);
+        PPLTVController ppltvController = new PPLTVController(0.02,
+                DriveConstants.kMaxSpeed);
+        ppltvController.setEnabled(false);
 
         AutoBuilder.configure(
                 this::getPose,
                 this::setPose,
                 this::getRobotRelativeSpeeds,
                 (ChassisSpeeds speeds) -> runClosedLoop(speeds),
-                new PPLTVController(0.02, DriveConstants.kMaxSpeed),
+                ppltvController,
                 DriveConstants.ppConfig,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this);
@@ -76,7 +85,8 @@ public class DriveSubsystem implements Subsystem {
                 activePath -> Logger.recordOutput(
                         "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()])));
         PathPlannerLogging.setLogTargetPoseCallback(
-                targetPose -> Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose));
+                targetPose -> Logger.recordOutput("Odometry/TrajectorySetpoint",
+                        targetPose));
 
         setPose(Pose2d.kZero);
     }
@@ -143,7 +153,7 @@ public class DriveSubsystem implements Subsystem {
     }
 
     public void runClosedLoop(ChassisSpeeds speeds) {
-        Logger.recordOutput("DriveSubsystem/A", speeds);
+        Logger.recordOutput("DriveSubsystem/SpeedSetpoint", speeds);
         DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(speeds);
         runClosedLoop(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond);
     }
@@ -156,13 +166,30 @@ public class DriveSubsystem implements Subsystem {
         double leftRadPerSec = leftMetersPerSec / DriveConstants.kWheelRadiusMeters;
         double rightRadPerSec = rightMetersPerSec / DriveConstants.kWheelRadiusMeters;
         Logger.recordOutput("DriveSubsystem/Setpoint/LeftRadPerSec", leftRadPerSec);
-        Logger.recordOutput("DriveSubsystem/Setpoint/RightRadPerSec",
-                rightRadPerSec);
+        Logger.recordOutput("DriveSubsystem/Setpoint/RightRadPerSec", rightRadPerSec);
 
-        double leftFFVolts = kS * Math.signum(leftRadPerSec) + kV * leftRadPerSec;
-        double rightFFVolts = kS * Math.signum(rightRadPerSec) + kV * rightRadPerSec;
+        double leftFFVolts = (kS * Math.signum(leftRadPerSec)) + (kV * leftRadPerSec);
+        double rightFFVolts = (kS * Math.signum(rightRadPerSec)) + (kV * rightRadPerSec);
 
         driveIO.setVelocity(leftRadPerSec, rightRadPerSec, leftFFVolts, rightFFVolts);
+    }
+
+    public void followTrajectory(DifferentialSample sample) {
+        // Get the current pose of the robot
+        Pose2d pose = getPose();
+
+        // Get the velocity feedforward specified by the sample
+        ChassisSpeeds ff = sample.getChassisSpeeds();
+
+        // Generate the next speeds for the robot
+        ChassisSpeeds speeds = ltvController.calculate(
+                pose,
+                sample.getPose(),
+                ff.vxMetersPerSecond,
+                ff.omegaRadiansPerSecond);
+
+        // Apply the generated speeds
+        runClosedLoop(speeds);
     }
 
     private void runDutyCycle(double leftOut, double rightOut) {

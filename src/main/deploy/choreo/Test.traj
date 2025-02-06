@@ -1,0 +1,49 @@
+{
+ "name":"Test",
+ "version":1,
+ "snapshot":{
+  "waypoints":[
+    {"x":7.0, "y":6.0, "heading":3.141592653589793, "intervals":14, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":6.0, "y":6.0, "heading":3.141592653589793, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+  "constraints":[
+    {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":"first", "to":"last", "data":{"type":"KeepInRectangle", "props":{"x":0.0, "y":0.0, "w":17.548, "h":8.052}}, "enabled":false}],
+  "targetDt":0.05
+ },
+ "params":{
+  "waypoints":[
+    {"x":{"exp":"7 m", "val":7.0}, "y":{"exp":"6 m", "val":6.0}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":14, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"6 m", "val":6.0}, "y":{"exp":"6 m", "val":6.0}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+  "constraints":[
+    {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
+    {"from":"first", "to":"last", "data":{"type":"KeepInRectangle", "props":{"x":{"exp":"0 m", "val":0.0}, "y":{"exp":"0 m", "val":0.0}, "w":{"exp":"17.548 m", "val":17.548}, "h":{"exp":"8.052 m", "val":8.052}}}, "enabled":false}],
+  "targetDt":{
+   "exp":"0.05 s",
+   "val":0.05
+  }
+ },
+ "trajectory":{
+  "sampleType":"Differential",
+  "waypoints":[0.0,0.94491],
+  "samples":[
+    {"t":0.0, "x":7.0, "y":6.0, "heading":3.14159, "vl":0.0, "vr":0.0, "omega":0.0, "al":4.51061, "ar":4.51061, "fl":102.299, "fr":102.299},
+    {"t":0.06749, "x":6.98973, "y":6.0, "heading":3.14159, "vl":0.30448, "vr":0.30448, "omega":0.0, "al":4.51185, "ar":4.51185, "fl":102.32709, "fr":102.32709},
+    {"t":0.13499, "x":6.9589, "y":6.0, "heading":3.14159, "vl":0.60899, "vr":0.60899, "omega":0.0, "al":4.51154, "ar":4.51154, "fl":102.32007, "fr":102.32007},
+    {"t":0.20248, "x":6.90752, "y":6.0, "heading":3.14159, "vl":0.91347, "vr":0.91347, "omega":0.0, "al":4.51108, "ar":4.51108, "fl":102.30953, "fr":102.30953},
+    {"t":0.26997, "x":6.83559, "y":6.0, "heading":3.14159, "vl":1.21791, "vr":1.21791, "omega":0.0, "al":4.5103, "ar":4.5103, "fl":102.29198, "fr":102.29198},
+    {"t":0.33747, "x":6.74312, "y":6.0, "heading":3.14159, "vl":1.52228, "vr":1.52228, "omega":0.0, "al":4.50876, "ar":4.50876, "fl":102.25689, "fr":102.25689},
+    {"t":0.40496, "x":6.63011, "y":6.0, "heading":3.14159, "vl":1.82643, "vr":1.82643, "omega":0.0, "al":4.50412, "ar":4.50412, "fl":102.15171, "fr":102.15171},
+    {"t":0.47245, "x":6.5, "y":6.0, "heading":3.14159, "vl":1.97843, "vr":1.97843, "omega":0.0, "al":0.0, "ar":0.0, "fl":0.0, "fr":0.0},
+    {"t":0.53995, "x":6.36989, "y":6.0, "heading":3.14159, "vl":1.82643, "vr":1.82643, "omega":0.0, "al":-4.50412, "ar":-4.50412, "fl":-102.15171, "fr":-102.15171},
+    {"t":0.60744, "x":6.25688, "y":6.0, "heading":3.14159, "vl":1.52228, "vr":1.52228, "omega":0.0, "al":-4.50876, "ar":-4.50876, "fl":-102.25689, "fr":-102.25689},
+    {"t":0.67493, "x":6.16441, "y":6.0, "heading":3.14159, "vl":1.21791, "vr":1.21791, "omega":0.0, "al":-4.5103, "ar":-4.5103, "fl":-102.29198, "fr":-102.29198},
+    {"t":0.74243, "x":6.09248, "y":6.0, "heading":3.14159, "vl":0.91347, "vr":0.91347, "omega":0.0, "al":-4.51108, "ar":-4.51108, "fl":-102.30953, "fr":-102.30953},
+    {"t":0.80992, "x":6.0411, "y":6.0, "heading":3.14159, "vl":0.60899, "vr":0.60899, "omega":0.0, "al":-4.51154, "ar":-4.51154, "fl":-102.32006, "fr":-102.32006},
+    {"t":0.87741, "x":6.01027, "y":6.0, "heading":3.14159, "vl":0.30448, "vr":0.30448, "omega":0.0, "al":-4.51185, "ar":-4.51185, "fl":-102.32709, "fr":-102.32709},
+    {"t":0.94491, "x":6.0, "y":6.0, "heading":3.14159, "vl":0.0, "vr":0.0, "omega":0.0, "al":0.0, "ar":0.0, "fl":-102.299, "fr":-102.299}],
+  "splits":[0]
+ },
+ "events":[]
+}

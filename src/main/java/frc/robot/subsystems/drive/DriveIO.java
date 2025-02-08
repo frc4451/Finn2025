@@ -2,6 +2,8 @@ package frc.robot.subsystems.drive;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
 public interface DriveIO {
     @AutoLog
     public static class DriveIOInputs {
@@ -14,6 +16,10 @@ public interface DriveIO {
         public double rightVelocityRadPerSec = 0.0;
         public double rightAppliedVolts = 0.0;
         public double[] rightCurrentAmps = new double[] {};
+    }
+
+    public default void configureMotorSettings(IdleMode mode) {
+
     }
 
     public default void updateInputs(DriveIOInputs inputs) {

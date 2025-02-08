@@ -35,6 +35,7 @@ public class RobotContainer {
 
   private final AutoFactory autoFactory;
   public final AutoChooser oreoChooser;
+  private final AutoRoutines autoRoutines;
 
   public RobotContainer() {
     switch (Constants.currentMode) {
@@ -63,7 +64,8 @@ public class RobotContainer {
     }
 
     oreoChooser = new AutoChooser();
-    // RobotModeTriggers.autonomous().whileTrue(oreoChooser.selectedCommandScheduler());
+
+    RobotModeTriggers.autonomous().whileTrue(oreoChooser.selectedCommandScheduler());
 
     autoFactory = new AutoFactory(
         driveSubsystem::getPose,
@@ -72,13 +74,13 @@ public class RobotContainer {
         false,
         driveSubsystem);
 
+    autoRoutines = new AutoRoutines(autoFactory, coralSubsystem);
     SmartDashboard.putData("Auto Choices", oreoChooser);
 
     // oreoChooser.addCmd("OreoTest", () -> Commands.sequence(
     // autoFactory.resetOdometry("Test"),
     // autoFactory.trajectoryCmd("Test")));
-
-    oreoChooser.addCmd("OreoTest", () -> autoFactory.trajectoryCmd("Test"));
+    oreoChooser.addCmd("OreoTest", autoRoutines::OreoTest);
 
     configureBindings();
   }
@@ -86,10 +88,9 @@ public class RobotContainer {
   // *configures the bindings for any controllers */
   private void configureBindings() {
     // sets the default command for the drive train
-    // driveSubsystem
-    // .setDefaultCommand(
-    // driveSubsystem.driveCommand(() -> -driveController.getLeftY(), () ->
-    // -driveController.getRightX()));
+    driveSubsystem
+        .setDefaultCommand(
+            driveSubsystem.driveCommand(() -> -driveController.getLeftY(), () -> -driveController.getRightX()));
     // driveSubsystem
     // .setDefaultCommand(
     // Commands.run(() -> driveSubsystem.runClosedLoop(1, 1), driveSubsystem));
@@ -102,4 +103,8 @@ public class RobotContainer {
             .ignoringDisable(true));
 
   }
+
+  // public Command getAutonomousCommand() {
+  // return oreoChooser.selectedCommand();
+  // }
 }

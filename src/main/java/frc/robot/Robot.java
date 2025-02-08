@@ -67,10 +67,10 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.oreoChooser.selectedCommand();
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    // m_autonomousCommand = m_robotContainer.oreoChooser.selectedCommand();
+    // if (m_autonomousCommand != null) {
+    // m_autonomousCommand.schedule();
+    // }
   }
 
   @Override

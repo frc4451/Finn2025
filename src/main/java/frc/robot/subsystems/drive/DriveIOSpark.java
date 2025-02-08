@@ -27,7 +27,7 @@ public class DriveIOSpark implements DriveIO {
         private final SparkClosedLoopController rightController = rightLeader.getClosedLoopController();
 
         public DriveIOSpark() {
-                configureMotorSettings();
+                configureMotorSettings(IdleMode.kBrake);
         }
 
         /**
@@ -35,11 +35,12 @@ public class DriveIOSpark implements DriveIO {
          * that makes it so sometimes they just don't apply the config and they just
          * won't work
          */
-        private void configureMotorSettings() {
+        @Override
+        public void configureMotorSettings(IdleMode mode) {
                 SparkBaseConfig config = new SparkMaxConfig();
                 config.openLoopRampRate(DriveConstants.kRampRateSeconds)
                                 .closedLoopRampRate(DriveConstants.kRampRateSeconds)
-                                .idleMode(IdleMode.kCoast)
+                                .idleMode(mode)
                                 .voltageCompensation(12.0)
                                 .smartCurrentLimit(DriveConstants.kCurrentLimit);
                 // config.closedLoop.pidf(DriveConstants.kMotorKp, DriveConstants.kMotorKi,
@@ -126,4 +127,5 @@ public class DriveIOSpark implements DriveIO {
                 leftController.setReference(leftOut, ControlType.kDutyCycle);
                 rightController.setReference(rightOut, ControlType.kDutyCycle);
         }
+
 }

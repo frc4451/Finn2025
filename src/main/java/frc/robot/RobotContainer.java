@@ -81,8 +81,13 @@ public class RobotContainer {
     // autoFactory.resetOdometry("Test"),
     // autoFactory.trajectoryCmd("Test")));
     oreoChooser.addCmd("OreoTest", autoRoutines::OreoTest);
+    oreoChooser.addCmd("Spaghetti", autoRoutines::Spaghetti);
+    oreoChooser.addCmd("Bottom path", autoRoutines::Bottom);
+    oreoChooser.addCmd("Top path", autoRoutines::Top);
+    oreoChooser.addCmd("Middle path", autoRoutines::Middle);
 
     configureBindings();
+
   }
 
   // *configures the bindings for any controllers */

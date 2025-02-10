@@ -21,7 +21,30 @@ public class AutoRoutines {
         return Commands.sequence(
                 factory.resetOdometry("Test"),
                 factory.trajectoryCmd("Test"));
+    }
 
+    public Command Spaghetti() {
+        return Commands.sequence(
+                factory.resetOdometry("Spaghetti"),
+                factory.trajectoryCmd("Spaghetti"));
+    }
+
+    public Command Bottom() {
+        return Commands.sequence(
+                factory.resetOdometry("Bottom path"),
+                factory.trajectoryCmd("Bottom path"));
+    }
+
+    public Command Top() {
+        return Commands.sequence(
+                factory.resetOdometry("Top path"),
+                factory.trajectoryCmd("Top Path"));
+    }
+
+    public Command Middle() {
+        return Commands.sequence(
+                factory.resetOdometry("Middle path"),
+                factory.trajectoryCmd("Middle Path"));
     }
 
 }

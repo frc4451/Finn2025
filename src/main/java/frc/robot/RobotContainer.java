@@ -74,17 +74,19 @@ public class RobotContainer {
         false,
         driveSubsystem);
 
-    autoRoutines = new AutoRoutines(autoFactory, coralSubsystem);
+    autoRoutines = new AutoRoutines(autoFactory, coralSubsystem, driveSubsystem);
     SmartDashboard.putData("Auto Choices", oreoChooser);
 
     // oreoChooser.addCmd("OreoTest", () -> Commands.sequence(
     // autoFactory.resetOdometry("Test"),
     // autoFactory.trajectoryCmd("Test")));
-    oreoChooser.addCmd("OreoTest", autoRoutines::OreoTest);
-    oreoChooser.addCmd("Spaghetti", autoRoutines::Spaghetti);
-    oreoChooser.addCmd("Bottom path", autoRoutines::Bottom);
-    oreoChooser.addCmd("Top path", autoRoutines::Top);
-    oreoChooser.addCmd("Middle path", autoRoutines::Middle);
+    oreoChooser.addCmd("OreoTest", autoRoutines::oreoTest);
+    oreoChooser.addCmd("Spaghetti", autoRoutines::spaghetti);
+    oreoChooser.addCmd("Bottom path", autoRoutines::bottom);
+    oreoChooser.addCmd("Top path", autoRoutines::top);
+    oreoChooser.addCmd("Middle path", autoRoutines::middle);
+    oreoChooser.addCmd("Duolingo", autoRoutines::middle);
+    oreoChooser.addCmd("S2 Bottom Path", autoRoutines::S2BP);
 
     configureBindings();
 

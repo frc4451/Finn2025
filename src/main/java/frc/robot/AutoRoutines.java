@@ -82,14 +82,17 @@ public class AutoRoutines {
 
         );
     }
-    // public Command SimpleGoScore() {
-    // return Command.sequence(
-    // Commands.deadline(Commands.waitSeconds(3),
-    // drive.setVoltageCommand(3.0,3.0))
-    // Commands.deadline(Commands.waitSeconds(1),
-    // coral.)
-    // );
 
-    // }
-
+    /*
+     * public Command SimpleGoScore() {
+     * return Command.sequence(
+     * //Commands.deadline(Commands.waitSeconds(3),
+     * //drive.setVoltageCommand(3.0, 3.0)),
+     * Commands.deadline(
+     * Commands.waitSeconds(1),
+     * coral.runCoral(8.0),
+     * drive.driveCommand(() -> 0.0, () -> 0.0)));
+     * 
+     * }
+     */
 }

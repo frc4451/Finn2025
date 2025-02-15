@@ -13,9 +13,11 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import frc.robot.subsystems.vision.VisionConstants;
+import frc.robot.util.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
@@ -50,7 +52,20 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
+
+    Threads.setCurrentThreadPriority(true, 99);
+
+    VirtualSubsystem.runPeriodically();
+
+    // Runs the Scheduler. This is responsible for polling buttons, adding
+    // newly-scheduled commands, running already-scheduled commands, removing
+    // finished or interrupted commands, and running subsystem periodic() methods.
+    // This must be called from the robot's periodic block in order for anything in
+    // the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    // Return to normal thread priority
+    Threads.setCurrentThreadPriority(false, 10);
   }
 
   @Override
@@ -107,5 +122,16 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void testExit() {
+  }
+
+  @Override
+  public void simulationInit() {
+    VisionConstants.aprilTagSim.ifPresent(
+        aprilTagSim -> aprilTagSim.addAprilTags(VisionConstants.fieldLayout));
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    VirtualSubsystem.runSimulationPeriodically();
   }
 }

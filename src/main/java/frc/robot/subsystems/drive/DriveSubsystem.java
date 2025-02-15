@@ -29,6 +29,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
+import frc.robot.bobot_state.BobotState;
+import frc.robot.subsystems.vision.PoseObservation;
 
 public class DriveSubsystem implements Subsystem {
     private final DriveIOInputsAutoLogged inputs = new DriveIOInputsAutoLogged();
@@ -94,6 +96,15 @@ public class DriveSubsystem implements Subsystem {
         }
 
         poseEstimator.update(rawGyroRotation, getLeftPositionMeters(), getRightPositionMeters());
+
+        PoseObservation observation;
+        while ((observation = BobotState.getVisionObservations().poll()) != null) {
+            poseEstimator.addVisionMeasurement(
+                    observation.robotPose().toPose2d(), observation.timestampSeconds()
+            // ,observation.stdDevs()
+            );
+        }
+        BobotState.updateGlobalPose(getPose());
     }
 
     @AutoLogOutput(key = "Odometry/Robot")
@@ -161,7 +172,7 @@ public class DriveSubsystem implements Subsystem {
 
     public void followTrajectory(DifferentialSample sample) {
         // Get the current pose of the robot
-        Pose2d pose = getPose();
+        Pose2d pose = BobotState.getGlobalPose();
 
         // Get the velocity feedforward specified by the sample
         ChassisSpeeds ff = sample.getChassisSpeeds();

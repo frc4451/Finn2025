@@ -89,8 +89,8 @@ public class RobotContainer {
     oreoChooser.addCmd("Spaghetti", autoRoutines::spaghetti);
     oreoChooser.addCmd("Bottom path", autoRoutines::bottom);
     oreoChooser.addCmd("Top path", autoRoutines::top);
-    oreoChooser.addCmd("Middle path", autoRoutines::middle);
-    oreoChooser.addCmd("Duolingo", autoRoutines::middle);
+    oreoChooser.addRoutine("Middle path", autoRoutines::middle);
+    // oreoChooser.addCmd("Duolingo", autoRoutines::middle);
     oreoChooser.addCmd("S2 Bottom Path", autoRoutines::S2BP);
 
     configureBindings();

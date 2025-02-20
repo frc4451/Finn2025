@@ -1,6 +1,10 @@
 package frc.robot;
 
+import org.littletonrobotics.junction.Logger;
+
 import choreo.auto.AutoFactory;
+import choreo.auto.AutoRoutine;
+import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.coral.CoralSubsystem;
@@ -56,11 +60,29 @@ public class AutoRoutines {
                 factory.trajectoryCmd("Top Path"));
     }
 
-    public Command middle() {
+    private Command followTrajectory(AutoTrajectory trajectory) {
         return Commands.sequence(
-                factory.resetOdometry("Middle path"),
-                factory.trajectoryCmd("Middle path"),
-                score());
+                Commands.runOnce(
+                        () -> Logger.recordOutput(
+                                "Odometry/Choreo/Trajectory", trajectory.getRawTrajectory().getPoses())),
+                trajectory.cmd());
+    }
+
+    private Command resetOdometry(AutoTrajectory trajectory) {
+        return trajectory.resetOdometry();
+    }
+
+    public AutoRoutine middle() {
+        AutoRoutine routine = this.factory.newRoutine("Middle path");
+        AutoTrajectory trajectory = routine.trajectory("Middle path");
+
+        routine.active().onTrue(
+                Commands.sequence(
+                        resetOdometry(trajectory),
+                        followTrajectory(trajectory),
+                        score()));
+
+        return routine;
     }
 
     public Command duolingo() {

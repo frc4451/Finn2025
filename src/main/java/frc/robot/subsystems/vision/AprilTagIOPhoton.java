@@ -159,6 +159,7 @@ public class AprilTagIOPhoton implements AprilTagIO {
         Pose3d pose = estimatedPose.estimatedPose;
         Matrix<N3, N1> stdDevs =
             AprilTagAlgorithms.getEstimationStdDevs(pose.toPose2d(), result.getTargets());
+          
         PoseObservation observation =
             new PoseObservation(
                 estimatedPose.estimatedPose,

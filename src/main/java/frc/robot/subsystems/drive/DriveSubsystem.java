@@ -100,9 +100,7 @@ public class DriveSubsystem implements Subsystem {
         PoseObservation observation;
         while ((observation = BobotState.getVisionObservations().poll()) != null) {
             poseEstimator.addVisionMeasurement(
-                    observation.robotPose().toPose2d(), observation.timestampSeconds()
-            // ,observation.stdDevs()
-            );
+                    observation.robotPose().toPose2d(), observation.timestampSeconds(), observation.stdDevs());
         }
         BobotState.updateGlobalPose(getPose());
     }
@@ -199,11 +197,11 @@ public class DriveSubsystem implements Subsystem {
             if (forward.getAsDouble() != 0) {
                 speeds = DifferentialDrive.curvatureDriveIK(
                         forward.getAsDouble() * Math.abs(forward.getAsDouble()),
-                        rotation.getAsDouble() * Math.abs(rotation.getAsDouble()) / 2, false);
+                        rotation.getAsDouble() * Math.abs(rotation.getAsDouble()) / 1.4, false);
             } else {
                 speeds = DifferentialDrive.arcadeDriveIK(
                         0,
-                        rotation.getAsDouble(),
+                        rotation.getAsDouble() / 2,
                         true);
 
             }
@@ -276,6 +274,11 @@ public class DriveSubsystem implements Subsystem {
                                     Logger.recordOutput("DriveSubsystem/kV", kV);
 
                                 }));
+    }
+
+    /** Returns the maximum linear speed in meters per sec. */
+    public double getMaxLinearSpeedMetersPerSec() {
+        return DriveConstants.kMaxSpeed;
     }
 
 }

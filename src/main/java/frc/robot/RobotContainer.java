@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.Set;
+
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -13,7 +15,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.bobot_state.BobotState;
+import frc.robot.commands.DrivePerpendicularToPoseCommand;
+import frc.robot.commands.RotateToTarget;
 import frc.robot.controllers.CommandCustomXboxController;
+import frc.robot.field.FieldUtils;
 import frc.robot.subsystems.coral.CoralIO;
 import frc.robot.subsystems.coral.CoralIOSim;
 import frc.robot.subsystems.coral.CoralIOSpark;
@@ -90,6 +95,7 @@ public class RobotContainer {
     oreoChooser.addCmd("Bottom path", autoRoutines::bottom);
     oreoChooser.addCmd("Top path", autoRoutines::top);
     oreoChooser.addRoutine("Middle path", autoRoutines::middle);
+    oreoChooser.addCmd("Turn", autoRoutines::turn);
     // oreoChooser.addCmd("Duolingo", autoRoutines::middle);
     oreoChooser.addCmd("S2 Bottom Path", autoRoutines::S2BP);
 
@@ -114,6 +120,46 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(() -> driveSubsystem.setPose(Pose2d.kZero), driveSubsystem)
             .ignoringDisable(true));
 
+  }
+
+  private void configureAlignmentBindings() {
+
+    driveController
+        .a().whileTrue(
+            Commands.defer(() -> new RotateToTarget(driveSubsystem, BobotState::getRotationToClosestReefIfPresent),
+                Set.of(driveSubsystem)));
+
+    // Coral
+    // driveController
+    // .a()
+    // .and(driveController.leftBumper().negate())
+    // .and(driveController.rightBumper().negate())
+    // .whileTrue(
+    // DriveCommands.joystickDriveAtAngle(
+    // driveSubsystem,
+    // () -> -driverController.getLeftYSquared(),
+    // () -> -driverController.getLeftXSquared(),
+    // () -> BobotState.getRotationToClosestReef()));
+
+    // driveController
+    // .a()
+    // .and(driveController.leftBumper())
+    // .whileTrue(
+    // DrivePerpendicularToPoseCommand.withJoystickRumble(
+    // driveSubsystem,
+    // () -> FieldUtils.getClosestReef().leftPole.getPose(),
+    // () -> -driverController.getLeftYSquared(),
+    // Commands.parallel()));
+
+    // driveController
+    // .a()
+    // .and(driveController.rightBumper())
+    // .whileTrue(
+    // DrivePerpendicularToPoseCommand.withJoystickRumble(
+    // drive,
+    // () -> FieldUtils.getClosestReef().rightPole.getPose(),
+    // () -> -driverController.getLeftYSquared(),
+    // Commands.parallel()));
   }
 
   // public Command getAutonomousCommand() {

@@ -172,5 +172,6 @@
     {"t":2.54738, "x":5.8, "y":4.0, "heading":3.14159, "vl":0.0, "vr":0.0, "omega":0.0, "al":0.0, "ar":0.0, "fl":-288.27648, "fr":-288.27648}],
   "splits":[0]
  },
- "events":[]
+ "events":[
+   {"name":"Marker", "from":{"target":1, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }

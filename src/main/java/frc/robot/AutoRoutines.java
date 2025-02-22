@@ -85,6 +85,12 @@ public class AutoRoutines {
         return routine;
     }
 
+    public Command turn() {
+        return Commands.sequence(
+                factory.resetOdometry("Turn"),
+                factory.trajectoryCmd("Turn"));
+    }
+
     public Command duolingo() {
         return Commands.sequence(
                 factory.resetOdometry("Duolingo"),

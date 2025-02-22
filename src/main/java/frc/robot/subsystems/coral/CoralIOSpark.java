@@ -30,7 +30,7 @@ public class CoralIOSpark implements CoralIO {
                 SparkMaxConfig config = new SparkMaxConfig();
                 config.inverted(true);
                 config.idleMode(IdleMode.kBrake)
-                                .smartCurrentLimit(30)
+                                .smartCurrentLimit(40)
                                 .voltageCompensation(12.0);
                 config.encoder
                                 .uvwMeasurementPeriod(CoralConstants.kUpdatePeriodMilliseconds)

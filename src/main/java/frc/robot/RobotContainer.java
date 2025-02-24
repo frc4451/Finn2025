@@ -15,10 +15,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.bobot_state.BobotState;
-import frc.robot.commands.DrivePerpendicularToPoseCommand;
+import frc.robot.bobot_state.varc.TargetAngleTracker;
 import frc.robot.commands.RotateToTarget;
 import frc.robot.controllers.CommandCustomXboxController;
-import frc.robot.field.FieldUtils;
 import frc.robot.subsystems.coral.CoralIO;
 import frc.robot.subsystems.coral.CoralIOSim;
 import frc.robot.subsystems.coral.CoralIOSpark;
@@ -119,16 +118,11 @@ public class RobotContainer {
     driveController.y().and(DriverStation::isDisabled)
         .onTrue(Commands.runOnce(() -> driveSubsystem.setPose(Pose2d.kZero), driveSubsystem)
             .ignoringDisable(true));
-
+    driveController.a()
+        .whileTrue(new RotateToTarget(driveSubsystem, () -> BobotState.getRotationToClosestReefIfPresent()));
   }
 
   private void configureAlignmentBindings() {
-
-    driveController
-        .a().whileTrue(
-            Commands.defer(() -> new RotateToTarget(driveSubsystem, BobotState::getRotationToClosestReefIfPresent),
-                Set.of(driveSubsystem)));
-
     // Coral
     // driveController
     // .a()

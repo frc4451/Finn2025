@@ -190,26 +190,28 @@ public class DriveSubsystem implements Subsystem {
         driveIO.setDutyCycle(leftOut, rightOut);
     }
 
+    public void drive(double forward, double rotation) {
+        WheelSpeeds speeds;
+        if (forward != 0) {
+            speeds = DifferentialDrive.curvatureDriveIK(
+                    forward * Math.abs(forward),
+                    rotation * Math.abs(rotation) / 1.4, false);
+        } else {
+            speeds = DifferentialDrive.arcadeDriveIK(
+                    0,
+                    rotation / 2,
+                    true);
+
+        }
+        Logger.recordOutput("DriveSubsystem/Setpoint/inputtedX", forward);
+        runClosedLoop(
+                speeds.left * DriveConstants.kMaxSpeed,
+                speeds.right * DriveConstants.kMaxSpeed);
+    }
+
     /** Command for controlling to drivetrain */
     public Command driveCommand(DoubleSupplier forward, DoubleSupplier rotation) {
-        return Commands.run(() -> {
-            WheelSpeeds speeds;
-            if (forward.getAsDouble() != 0) {
-                speeds = DifferentialDrive.curvatureDriveIK(
-                        forward.getAsDouble() * Math.abs(forward.getAsDouble()),
-                        rotation.getAsDouble() * Math.abs(rotation.getAsDouble()) / 1.4, false);
-            } else {
-                speeds = DifferentialDrive.arcadeDriveIK(
-                        0,
-                        rotation.getAsDouble() / 2,
-                        true);
-
-            }
-            Logger.recordOutput("DriveSubsystem/Setpoint/inputtedX", forward.getAsDouble());
-            runClosedLoop(
-                    speeds.left * DriveConstants.kMaxSpeed,
-                    speeds.right * DriveConstants.kMaxSpeed);
-        }, this);
+        return Commands.run(() -> drive(forward.getAsDouble(), rotation.getAsDouble()), this);
     }
 
     /** Runs the drive in open loop. */

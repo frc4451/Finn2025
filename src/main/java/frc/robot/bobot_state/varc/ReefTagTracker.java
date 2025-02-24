@@ -8,19 +8,19 @@ import frc.robot.field.FieldUtils;
 import java.util.Optional;
 
 public class ReefTagTracker extends TargetAngleTracker {
-  private Optional<Rotation2d> rotationTarget;
+  private Rotation2d rotationTarget;
 
-  private Optional<ReefFace> closestReef;
+  private ReefFace closestReef;
 
   public ReefTagTracker() {
     super();
   }
 
-  public Optional<Rotation2d> getRotationTarget() {
+  public Rotation2d getRotationTarget() {
     return rotationTarget;
   }
 
-  public Optional<ReefFace> getClosestReef() {
+  public ReefFace getClosestReef() {
     return closestReef;
   }
 
@@ -29,25 +29,23 @@ public class ReefTagTracker extends TargetAngleTracker {
 
     // TODO Handle Vision targeting here
 
-    this.rotationTarget =
-        Optional.of(
-            FieldUtils.getClosestReef()
-                .tag()
-                .pose()
-                .getRotation()
-                .toRotation2d()
-                .plus(Rotation2d.kPi));
+    this.rotationTarget = FieldUtils.getClosestReef()
+        .tag()
+        .pose()
+        .getRotation()
+        .toRotation2d()
+        .plus(Rotation2d.kPi);
 
-    this.closestReef = Optional.of(FieldUtils.getClosestReef());
+    this.closestReef = FieldUtils.getClosestReef();
 
     // this.rotationTarget =
-    //     Optional.of(
-    //         FieldUtils.getClosestReefAprilTag()
-    //             .pose()
-    //             .relativeTo(robotPose)
-    //             .getTranslation()
-    //             .toTranslation2d()
-    //             .getAngle()
-    //             .plus(BobotState.getGlobalPose().getRotation()));
+    // Optional.of(
+    // FieldUtils.getClosestReefAprilTag()
+    // .pose()
+    // .relativeTo(robotPose)
+    // .getTranslation()
+    // .toTranslation2d()
+    // .getAngle()
+    // .plus(BobotState.getGlobalPose().getRotation()));
   }
 }

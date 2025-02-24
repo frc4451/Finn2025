@@ -7,13 +7,13 @@ import frc.robot.field.FieldUtils;
 import java.util.Optional;
 
 public class BargeTagTracker extends TargetAngleTracker {
-  private Optional<Rotation2d> rotationTarget;
+  private Rotation2d rotationTarget;
 
   public BargeTagTracker() {
     super();
   }
 
-  public Optional<Rotation2d> getRotationTarget() {
+  public Rotation2d getRotationTarget() {
     return rotationTarget;
   }
 
@@ -22,8 +22,6 @@ public class BargeTagTracker extends TargetAngleTracker {
 
     // TODO Handle Vision targeting here
 
-    this.rotationTarget =
-        Optional.of(
-            FieldUtils.getBargeTag().pose().getRotation().toRotation2d().plus(Rotation2d.kPi));
+    this.rotationTarget = (FieldUtils.getBargeTag().pose().getRotation().toRotation2d().plus(Rotation2d.kPi));
   }
 }

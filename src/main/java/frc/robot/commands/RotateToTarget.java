@@ -19,7 +19,6 @@ public class RotateToTarget extends Command {
     private final Supplier<Rotation2d> targetRotationSupplier;
 
     public RotateToTarget(DriveSubsystem drive, Supplier<Rotation2d> targetRotationSupplier) {
-        Pose2d robotPose2d = BobotState.getGlobalPose();
         this.drive = drive;
         this.targetRotationSupplier = targetRotationSupplier;
 
@@ -27,13 +26,13 @@ public class RotateToTarget extends Command {
 
     @Override
     public void execute() {
-        Logger.recordOutput(getName(), BobotState.getRotationToClosestReefIfPresent());
+        Logger.recordOutput("Commands/" + getName(), BobotState.getRotationToClosestReefIfPresent());
         Rotation2d targetRotation = targetRotationSupplier.get();
 
         Rotation2d robotRotation = BobotState.getGlobalPose().getRotation();
         double rotationError = robotRotation.minus(targetRotation).getRadians();
         double output = angleController.calculate(rotationError);
 
-        drive.driveCommand(() -> 0, () -> output);
+        drive.drive(0, output);
     }
 }

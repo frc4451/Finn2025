@@ -7,13 +7,13 @@ import frc.robot.field.FieldUtils;
 import java.util.Optional;
 
 public class HPSTagTracker extends TargetAngleTracker {
-  private Optional<Rotation2d> rotationTarget;
+  private Rotation2d rotationTarget;
 
   public HPSTagTracker() {
     super();
   }
 
-  public Optional<Rotation2d> getRotationTarget() {
+  public Rotation2d getRotationTarget() {
     return rotationTarget;
   }
 
@@ -22,7 +22,6 @@ public class HPSTagTracker extends TargetAngleTracker {
 
     // TODO Handle Vision targeting here
 
-    this.rotationTarget =
-        Optional.of(FieldUtils.getClosestHPSTag().pose().getRotation().toRotation2d());
+    this.rotationTarget = (FieldUtils.getClosestHPSTag().pose().getRotation().toRotation2d());
   }
 }

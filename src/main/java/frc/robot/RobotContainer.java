@@ -98,6 +98,7 @@ public class RobotContainer {
     // oreoChooser.addCmd("Duolingo", autoRoutines::middle);
     oreoChooser.addCmd("S2 Bottom Path", autoRoutines::S2BP);
     oreoChooser.addCmd("ReefScore", autoRoutines::ReefScore);
+    oreoChooser.addCmd("LIJ", autoRoutines::LIJ);
 
     configureBindings();
 

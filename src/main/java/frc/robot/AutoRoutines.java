@@ -26,7 +26,7 @@ public class AutoRoutines {
     private Command score() {
         return Commands.deadline(
                 Commands.waitSeconds(1),
-                coral.runCoral(8.0),
+                coral.runCoral(6.0),
                 drive.driveCommand(() -> 0.0, () -> 0.0));
     }
 
@@ -109,6 +109,28 @@ public class AutoRoutines {
                 score()
 
         );
+    }
+
+    public Command ReefScore() {
+        String trajectory = "SMtoCGH";
+
+        return Commands.sequence(
+                factory.resetOdometry(trajectory),
+                factory.trajectoryCmd(trajectory),
+                wait(1),
+                score());
+    }
+
+    public Command LIJ() {
+        String trajectory = "SLtoCIJ-1";
+        String trajectory2 = "SLtoCIJ-2";
+
+        return Commands.sequence(
+                factory.resetOdometry(trajectory),
+                factory.trajectoryCmd(trajectory),
+                factory.trajectoryCmd(trajectory2),
+                wait(1),
+                score());
     }
 
     /*

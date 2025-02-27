@@ -97,6 +97,7 @@ public class RobotContainer {
     oreoChooser.addCmd("Turn", autoRoutines::turn);
     // oreoChooser.addCmd("Duolingo", autoRoutines::middle);
     oreoChooser.addCmd("S2 Bottom Path", autoRoutines::S2BP);
+    oreoChooser.addCmd("ReefScore", autoRoutines::ReefScore);
 
     configureBindings();
 
@@ -118,8 +119,12 @@ public class RobotContainer {
     driveController.y().and(DriverStation::isDisabled)
         .onTrue(Commands.runOnce(() -> driveSubsystem.setPose(Pose2d.kZero), driveSubsystem)
             .ignoringDisable(true));
+    driveController.x()
+        .whileTrue(new RotateToTarget(driveSubsystem, () -> BobotState.getRotationToClosestReefIfPresent(),
+            () -> -driveController.getLeftY()));
     driveController.a()
-        .whileTrue(new RotateToTarget(driveSubsystem, () -> BobotState.getRotationToClosestReefIfPresent()));
+        .whileTrue(new RotateToTarget(driveSubsystem, () -> BobotState.getRotationToClosestHPSIfPresent(),
+            () -> -driveController.getLeftY()));
   }
 
   private void configureAlignmentBindings() {

@@ -8,7 +8,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class DriveCommandConstants {
     public static ProfiledPIDController makeAngleController() {
-        ProfiledPIDController angleController = new ProfiledPIDController(5.0, 0.0, 0.4,
+        ProfiledPIDController angleController = new ProfiledPIDController(1.8, 0.0, 0.0,
                 new TrapezoidProfile.Constraints(8.0, 20.0));
         angleController.enableContinuousInput(-Math.PI, Math.PI);
         angleController.setTolerance(Units.degreesToRadians(2));

@@ -30,85 +30,10 @@ public class AutoRoutines {
                 drive.driveCommand(() -> 0.0, () -> 0.0));
     }
 
-    private Command wait(int sec) {
+    private Command wait(Double sec) {
         return Commands.deadline(
                 Commands.waitSeconds(sec),
                 drive.driveCommand(() -> 0.0, () -> 0.0));
-    }
-
-    public Command oreoTest() {
-        return Commands.sequence(
-                factory.resetOdometry("Test"),
-                factory.trajectoryCmd("Test"));
-    }
-
-    public Command spaghetti() {
-        return Commands.sequence(
-                factory.resetOdometry("Spaghetti"),
-                factory.trajectoryCmd("Spaghetti"));
-    }
-
-    public Command bottom() {
-        return Commands.sequence(
-                factory.resetOdometry("Bottom path"),
-                factory.trajectoryCmd("Bottom path"));
-    }
-
-    public Command top() {
-        return Commands.sequence(
-                factory.resetOdometry("Top path"),
-                factory.trajectoryCmd("Top Path"));
-    }
-
-    private Command followTrajectory(AutoTrajectory trajectory) {
-        return Commands.sequence(
-                Commands.runOnce(
-                        () -> Logger.recordOutput(
-                                "Odometry/Choreo/Trajectory", trajectory.getRawTrajectory().getPoses())),
-                trajectory.cmd());
-    }
-
-    private Command resetOdometry(AutoTrajectory trajectory) {
-        return trajectory.resetOdometry();
-    }
-
-    public AutoRoutine middle() {
-        AutoRoutine routine = this.factory.newRoutine("Middle path");
-        AutoTrajectory trajectory = routine.trajectory("Middle path");
-
-        routine.active().onTrue(
-                Commands.sequence(
-                        resetOdometry(trajectory),
-                        followTrajectory(trajectory),
-                        score()));
-
-        return routine;
-    }
-
-    public Command turn() {
-        return Commands.sequence(
-                factory.resetOdometry("Turn"),
-                factory.trajectoryCmd("Turn"));
-    }
-
-    public Command duolingo() {
-        return Commands.sequence(
-                factory.resetOdometry("Duolingo"),
-                factory.trajectoryCmd("Duolingo"),
-                score());
-    }
-
-    public Command S2BP() {
-        return Commands.sequence(
-                factory.resetOdometry("bottomtoCF"),
-                factory.trajectoryCmd("bottomtoCF"),
-                score(),
-                factory.trajectoryCmd("CFtoSta"),
-                wait(2),
-                factory.trajectoryCmd("StatoBF"),
-                score()
-
-        );
     }
 
     public Command ReefScore() {
@@ -117,20 +42,65 @@ public class AutoRoutines {
         return Commands.sequence(
                 factory.resetOdometry(trajectory),
                 factory.trajectoryCmd(trajectory),
-                wait(1),
+                wait(0.5),
                 score());
     }
 
-    public Command LIJ() {
-        String trajectory = "SLtoCIJ-1";
-        String trajectory2 = "SLtoCIJ-2";
+    public Command StartLeftToIJ() {
+        String trajectory1 = "SLtoCIJ";
 
         return Commands.sequence(
-                factory.resetOdometry(trajectory),
-                factory.trajectoryCmd(trajectory),
-                factory.trajectoryCmd(trajectory2),
-                wait(1),
+                factory.resetOdometry(trajectory1),
+                factory.trajectoryCmd(trajectory1),
+                wait(0.5),
                 score());
+    }
+
+    public Command IJtoHumanPlayerLeft() {
+        String trajectory1 = "CIJtoHL";
+
+        return Commands.sequence(
+                factory.resetOdometry(trajectory1),
+                factory.trajectoryCmd(trajectory1),
+                wait(0.5));
+    }
+
+    public Command Wailmer() {
+        String trajectory1 = "SLtoCIJ";
+        String trajectory2 = "CIJtoHL";
+        String trajectory3 = "HLtoCKL";
+
+        return Commands.sequence(
+                factory.resetOdometry(trajectory1),
+                factory.trajectoryCmd(trajectory1),
+                wait(0.25),
+                score(),
+                wait(0.25),
+                factory.trajectoryCmd(trajectory2),
+                wait(.75),
+                factory.trajectoryCmd(trajectory3),
+                wait(0.25),
+                score());
+
+    }
+
+    public Command Seel() {
+        String trajectory1 = "SRtoCEF";
+        String trajectory2 = "CEFtoHR";
+        String trajectory3 = "HRtoCCD";
+
+        return Commands.sequence(
+                factory.resetOdometry(trajectory1),
+                factory.trajectoryCmd(trajectory1),
+                wait(0.15),
+                score(),
+                wait(0.15),
+                factory.trajectoryCmd(trajectory2),
+                wait(.5),
+                factory.trajectoryCmd(trajectory3),
+                wait(0.15),
+                score());
+        // time elapsed AS OF 2/27 - 14.8 sec
     }
 
     /*

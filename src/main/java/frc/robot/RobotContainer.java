@@ -80,7 +80,7 @@ public class RobotContainer {
         driveSubsystem::getPose,
         driveSubsystem::setPose,
         driveSubsystem::followTrajectory,
-        false,
+        true,
         driveSubsystem);
 
     autoRoutines = new AutoRoutines(autoFactory, coralSubsystem, driveSubsystem);
@@ -89,16 +89,11 @@ public class RobotContainer {
     // oreoChooser.addCmd("OreoTest", () -> Commands.sequence(
     // autoFactory.resetOdometry("Test"),
     // autoFactory.trajectoryCmd("Test")));
-    oreoChooser.addCmd("OreoTest", autoRoutines::oreoTest);
-    oreoChooser.addCmd("Spaghetti", autoRoutines::spaghetti);
-    oreoChooser.addCmd("Bottom path", autoRoutines::bottom);
-    oreoChooser.addCmd("Top path", autoRoutines::top);
-    oreoChooser.addRoutine("Middle path", autoRoutines::middle);
-    oreoChooser.addCmd("Turn", autoRoutines::turn);
-    // oreoChooser.addCmd("Duolingo", autoRoutines::middle);
-    oreoChooser.addCmd("S2 Bottom Path", autoRoutines::S2BP);
     oreoChooser.addCmd("ReefScore", autoRoutines::ReefScore);
-    oreoChooser.addCmd("LIJ", autoRoutines::LIJ);
+    oreoChooser.addCmd("StartLeftToIJ", autoRoutines::StartLeftToIJ);
+    oreoChooser.addCmd("IJtoHumanPlayerLeft", autoRoutines::IJtoHumanPlayerLeft);
+    oreoChooser.addCmd("Wailmer", autoRoutines::Wailmer);
+    oreoChooser.addCmd("Seel", autoRoutines::Seel);
 
     configureBindings();
 

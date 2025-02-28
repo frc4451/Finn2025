@@ -3,7 +3,29 @@
  "version":1,
  "type":"Differential",
  "variables":{
-  "expressions":{},
+  "expressions":{
+   "MaxA":{
+    "dimension":"LinAcc",
+    "var":{
+     "exp":"1 m / s ^ 2",
+     "val":1.0
+    }
+   },
+   "MaxAV":{
+    "dimension":"AngVel",
+    "var":{
+     "exp":"35 deg / s",
+     "val":0.6108652381980153
+    }
+   },
+   "MaxV":{
+    "dimension":"LinVel",
+    "var":{
+     "exp":"2 m / s",
+     "val":2.0
+    }
+   }
+  },
   "poses":{
    "CAB":{
     "x":{
@@ -35,8 +57,8 @@
    },
    "CEF":{
     "x":{
-     "exp":"5.15 m",
-     "val":5.15
+     "exp":"5.1 m",
+     "val":5.1
     },
     "y":{
      "exp":"2.85 m",
@@ -81,8 +103,8 @@
      "val":3.8
     },
     "y":{
-     "exp":"5 m",
-     "val":5.0
+     "exp":"5.2 m",
+     "val":5.2
     },
     "heading":{
      "exp":"-60 deg",
@@ -115,6 +137,34 @@
     "heading":{
      "exp":"54 deg",
      "val":0.942477796076938
+    }
+   },
+   "SR":{
+    "x":{
+     "exp":"7.6 m",
+     "val":7.6
+    },
+    "y":{
+     "exp":"1.9 m",
+     "val":1.9
+    },
+    "heading":{
+     "exp":"180 deg",
+     "val":3.141592653589793
+    }
+   },
+   "StartLeft":{
+    "x":{
+     "exp":"7.6 m",
+     "val":7.6
+    },
+    "y":{
+     "exp":"6.2 m",
+     "val":6.2
+    },
+    "heading":{
+     "exp":"180 deg",
+     "val":3.141592653589793
     }
    }
   }

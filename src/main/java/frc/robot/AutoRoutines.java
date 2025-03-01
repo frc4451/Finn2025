@@ -36,33 +36,14 @@ public class AutoRoutines {
                 drive.driveCommand(() -> 0.0, () -> 0.0));
     }
 
-    public Command ReefScore() {
+    public Command Shpeal() {
         String trajectory = "SMtoCGH";
 
         return Commands.sequence(
                 factory.resetOdometry(trajectory),
                 factory.trajectoryCmd(trajectory),
-                wait(0.5),
+                wait(0.15),
                 score());
-    }
-
-    public Command StartLeftToIJ() {
-        String trajectory1 = "SLtoCIJ";
-
-        return Commands.sequence(
-                factory.resetOdometry(trajectory1),
-                factory.trajectoryCmd(trajectory1),
-                wait(0.5),
-                score());
-    }
-
-    public Command IJtoHumanPlayerLeft() {
-        String trajectory1 = "CIJtoHL";
-
-        return Commands.sequence(
-                factory.resetOdometry(trajectory1),
-                factory.trajectoryCmd(trajectory1),
-                wait(0.5));
     }
 
     public Command Wailmer() {
@@ -73,13 +54,13 @@ public class AutoRoutines {
         return Commands.sequence(
                 factory.resetOdometry(trajectory1),
                 factory.trajectoryCmd(trajectory1),
-                wait(0.25),
+                wait(0.15),
                 score(),
-                wait(0.25),
+                wait(0.15),
                 factory.trajectoryCmd(trajectory2),
-                wait(.75),
+                wait(.15),
                 factory.trajectoryCmd(trajectory3),
-                wait(0.25),
+                wait(0.15),
                 score());
 
     }

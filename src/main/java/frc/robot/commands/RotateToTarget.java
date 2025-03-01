@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -14,8 +15,7 @@ import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.DriveSubsystem;
 
 public class RotateToTarget extends Command {
-    private final ProfiledPIDController angleController = DriveCommandConstants.makeAngleController();
-
+    private final PIDController angleController = new PIDController(3, 0, 0.3);
     private final DriveSubsystem drive;
     private final Supplier<Rotation2d> targetRotationSupplier;
     private final Supplier<Double> forwardInput;

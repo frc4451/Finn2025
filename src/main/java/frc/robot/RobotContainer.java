@@ -89,12 +89,9 @@ public class RobotContainer {
     // oreoChooser.addCmd("OreoTest", () -> Commands.sequence(
     // autoFactory.resetOdometry("Test"),
     // autoFactory.trajectoryCmd("Test")));
-    oreoChooser.addCmd("ReefScore", autoRoutines::ReefScore);
-    oreoChooser.addCmd("StartLeftToIJ", autoRoutines::StartLeftToIJ);
-    oreoChooser.addCmd("IJtoHumanPlayerLeft", autoRoutines::IJtoHumanPlayerLeft);
+    oreoChooser.addCmd("Shpeal", autoRoutines::Shpeal);
     oreoChooser.addCmd("Wailmer", autoRoutines::Wailmer);
     oreoChooser.addCmd("Seel", autoRoutines::Seel);
-
     configureBindings();
 
   }
@@ -109,9 +106,10 @@ public class RobotContainer {
     // .setDefaultCommand(
     // Commands.run(() -> driveSubsystem.runClosedLoop(1, 1), driveSubsystem));
 
-    driveController.rightTrigger().whileTrue(coralSubsystem.runCoral(6.0));
+    driveController.rightTrigger().whileTrue(coralSubsystem.runCoral(8.0));
     driveController.leftTrigger().whileTrue(coralSubsystem.runCoral(-6.0));
     driveController.b().whileTrue(coralSubsystem.runCoral(12.0));
+    driveController.rightBumper().whileTrue(coralSubsystem.runCoral(6.0));
     driveController.y().and(DriverStation::isDisabled)
         .onTrue(Commands.runOnce(() -> driveSubsystem.setPose(Pose2d.kZero), driveSubsystem)
             .ignoringDisable(true));

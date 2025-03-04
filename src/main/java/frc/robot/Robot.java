@@ -16,16 +16,17 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.coral.CoralIOSpark;
+import frc.robot.subsystems.coral.CoralSubsystem;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.util.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
-  private final RobotContainer m_robotContainer;
+  private final RobotContainer m_robotContainer = new RobotContainer();
 
   public Robot() {
-    m_robotContainer = new RobotContainer();
 
     switch (Constants.currentMode) {
       case REAL:
@@ -101,6 +102,7 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_robotContainer.rampUp(1.0);
   }
 
   @Override

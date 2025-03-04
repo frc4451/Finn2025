@@ -96,6 +96,10 @@ public class RobotContainer {
 
   }
 
+  public Command rampUp(double V) {
+    return coralSubsystem.rampUp(V);
+  }
+
   // *configures the bindings for any controllers */
   private void configureBindings() {
     // sets the default command for the drive train
@@ -108,7 +112,6 @@ public class RobotContainer {
 
     driveController.rightTrigger().whileTrue(coralSubsystem.runCoral(8.0));
     driveController.leftTrigger().whileTrue(coralSubsystem.runCoral(-6.0));
-    driveController.b().whileTrue(coralSubsystem.runCoral(12.0));
     driveController.rightBumper().whileTrue(coralSubsystem.runCoral(6.0));
     driveController.y().and(DriverStation::isDisabled)
         .onTrue(Commands.runOnce(() -> driveSubsystem.setPose(Pose2d.kZero), driveSubsystem)
@@ -119,6 +122,8 @@ public class RobotContainer {
     driveController.a()
         .whileTrue(new RotateToTarget(driveSubsystem, () -> BobotState.getRotationToClosestHPSIfPresent(),
             () -> -driveController.getLeftY()));
+
+    driveController.b().whileTrue(rampUp(0));
   }
 
   private void configureAlignmentBindings() {

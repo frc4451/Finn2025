@@ -5,16 +5,19 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+
 import org.littletonrobotics.junction.Logger;
 
-public class CoralSubsystem extends SubsystemBase {
+import com.revrobotics.servohub.ServoHub;
 
+public class CoralSubsystem extends SubsystemBase {
     protected final CoralIOInputsAutoLogged inputs = new CoralIOInputsAutoLogged();
     protected CoralIO io;
-    private Servo servo = new Servo(0);
 
     public CoralSubsystem(CoralIO io) {
         this.io = io;
+
     }
 
     @Override
@@ -31,7 +34,4 @@ public class CoralSubsystem extends SubsystemBase {
         return startEnd(() -> io.runVolts(inputVolts), () -> io.stop());
     }
 
-    public Command rampUp(double V) {
-        return Commands.runOnce(() -> servo.set(V), this);
-    }
 }

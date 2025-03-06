@@ -28,6 +28,8 @@ import frc.robot.subsystems.drive.DriveIOSpark;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon1;
+import frc.robot.subsystems.servo.ServoIOReal;
+import frc.robot.subsystems.servo.ServoSubsystem;
 import frc.robot.subsystems.vision.Vision;
 
 public class RobotContainer {
@@ -37,7 +39,8 @@ public class RobotContainer {
       Constants.XboxDriverControllerPort);
 
   private final DriveSubsystem driveSubsystem;
-  private final CoralSubsystem coralSubsystem;
+  protected final CoralSubsystem coralSubsystem;
+  private final ServoSubsystem servoSubsystem = new ServoSubsystem(new ServoIOReal());
   private final Vision vision = new Vision();
 
   private final AutoFactory autoFactory;
@@ -92,12 +95,11 @@ public class RobotContainer {
     oreoChooser.addCmd("Shpeal", autoRoutines::Shpeal);
     oreoChooser.addCmd("Wailmer", autoRoutines::Wailmer);
     oreoChooser.addCmd("Seel", autoRoutines::Seel);
+
+    RobotModeTriggers.teleop().onTrue(servoSubsystem.setAngle(90));
+
     configureBindings();
 
-  }
-
-  public Command rampUp(double V) {
-    return coralSubsystem.rampUp(V);
   }
 
   // *configures the bindings for any controllers */
@@ -123,44 +125,5 @@ public class RobotContainer {
         .whileTrue(new RotateToTarget(driveSubsystem, () -> BobotState.getRotationToClosestHPSIfPresent(),
             () -> -driveController.getLeftY()));
 
-    driveController.b().whileTrue(rampUp(0));
   }
-
-  private void configureAlignmentBindings() {
-    // Coral
-    // driveController
-    // .a()
-    // .and(driveController.leftBumper().negate())
-    // .and(driveController.rightBumper().negate())
-    // .whileTrue(
-    // DriveCommands.joystickDriveAtAngle(
-    // driveSubsystem,
-    // () -> -driverController.getLeftYSquared(),
-    // () -> -driverController.getLeftXSquared(),
-    // () -> BobotState.getRotationToClosestReef()));
-
-    // driveController
-    // .a()
-    // .and(driveController.leftBumper())
-    // .whileTrue(
-    // DrivePerpendicularToPoseCommand.withJoystickRumble(
-    // driveSubsystem,
-    // () -> FieldUtils.getClosestReef().leftPole.getPose(),
-    // () -> -driverController.getLeftYSquared(),
-    // Commands.parallel()));
-
-    // driveController
-    // .a()
-    // .and(driveController.rightBumper())
-    // .whileTrue(
-    // DrivePerpendicularToPoseCommand.withJoystickRumble(
-    // drive,
-    // () -> FieldUtils.getClosestReef().rightPole.getPose(),
-    // () -> -driverController.getLeftYSquared(),
-    // Commands.parallel()));
-  }
-
-  // public Command getAutonomousCommand() {
-  // return oreoChooser.selectedCommand();
-  // }
 }

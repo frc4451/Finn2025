@@ -13,9 +13,11 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.coral.CoralIOSpark;
 import frc.robot.subsystems.coral.CoralSubsystem;
 import frc.robot.subsystems.vision.VisionConstants;
@@ -48,7 +50,7 @@ public class Robot extends LoggedRobot {
 
     DriverStation.silenceJoystickConnectionWarning(true);
     Logger.registerURCL(URCL.startExternal());
-    // Logger.start();
+    Logger.start();
   }
 
   @Override
@@ -102,7 +104,6 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_robotContainer.rampUp(1.0);
   }
 
   @Override

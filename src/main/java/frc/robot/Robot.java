@@ -12,16 +12,23 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.coral.CoralIOSpark;
+import frc.robot.subsystems.coral.CoralSubsystem;
+import frc.robot.subsystems.vision.VisionConstants;
+import frc.robot.util.VirtualSubsystem;
 
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
-  private final RobotContainer m_robotContainer;
+  private final RobotContainer m_robotContainer = new RobotContainer();
 
   public Robot() {
-    m_robotContainer = new RobotContainer();
 
     switch (Constants.currentMode) {
       case REAL:
@@ -41,13 +48,27 @@ public class Robot extends LoggedRobot {
         break;
     }
 
+    DriverStation.silenceJoystickConnectionWarning(true);
     Logger.registerURCL(URCL.startExternal());
     Logger.start();
   }
 
   @Override
   public void robotPeriodic() {
+
+    Threads.setCurrentThreadPriority(true, 99);
+
+    VirtualSubsystem.runPeriodically();
+
+    // Runs the Scheduler. This is responsible for polling buttons, adding
+    // newly-scheduled commands, running already-scheduled commands, removing
+    // finished or interrupted commands, and running subsystem periodic() methods.
+    // This must be called from the robot's periodic block in order for anything in
+    // the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    // Return to normal thread priority
+    Threads.setCurrentThreadPriority(false, 10);
   }
 
   @Override
@@ -64,11 +85,10 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    // m_autonomousCommand = m_robotContainer.oreoChooser.selectedCommand();
+    // if (m_autonomousCommand != null) {
+    // m_autonomousCommand.schedule();
+    // }
   }
 
   @Override
@@ -105,5 +125,16 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void testExit() {
+  }
+
+  @Override
+  public void simulationInit() {
+    VisionConstants.aprilTagSim.ifPresent(
+        aprilTagSim -> aprilTagSim.addAprilTags(VisionConstants.fieldLayout));
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    VirtualSubsystem.runSimulationPeriodically();
   }
 }

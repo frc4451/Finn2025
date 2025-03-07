@@ -1,6 +1,7 @@
 package frc.robot.subsystems.drive;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -12,7 +13,10 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import frc.robot.util.SparkUtil;
 
 public class DriveIOSpark implements DriveIO {
-    /** Creates different objects for all the motors, and encoder and controller objects for the lead motors */
+        /**
+         * Creates different objects for all the motors, and encoder and controller
+         * objects for the lead motors
+         */
         private final SparkMax leftLeader = new SparkMax(DriveConstants.kFrontLeftId, DriveConstants.kMotorType);
         private final SparkMax rightLeader = new SparkMax(DriveConstants.kFrontRightId, DriveConstants.kMotorType);
         private final SparkMax leftFollower = new SparkMax(DriveConstants.kBackLeftId, DriveConstants.kMotorType);
@@ -23,16 +27,25 @@ public class DriveIOSpark implements DriveIO {
         private final SparkClosedLoopController rightController = rightLeader.getClosedLoopController();
 
         public DriveIOSpark() {
-                configureMotorSettings();
+                configureMotorSettings(IdleMode.kBrake);
         }
-        
-        /** Configures Motor settings. Try until ok exists because of Rev Hardware bug that makes it so sometimes they just don't apply the config and they just won't work */
-        private void configureMotorSettings() {
+
+        /**
+         * Configures Motor settings. Try until ok exists because of Rev Hardware bug
+         * that makes it so sometimes they just don't apply the config and they just
+         * won't work
+         */
+        @Override
+        public void configureMotorSettings(IdleMode mode) {
                 SparkBaseConfig config = new SparkMaxConfig();
                 config.openLoopRampRate(DriveConstants.kRampRateSeconds)
-                                .idleMode(IdleMode.kBrake)
-                                .voltageCompensation(12.0);
-                config.closedLoop.pidf(DriveConstants.kMotorKp, DriveConstants.kMotorKi, DriveConstants.kMotorKd, DriveConstants.kMotorKf);
+                                .closedLoopRampRate(DriveConstants.kRampRateSeconds)
+                                .idleMode(mode)
+                                .voltageCompensation(12.0)
+                                .smartCurrentLimit(DriveConstants.kCurrentLimit);
+                // config.closedLoop.pidf(DriveConstants.kMotorKp, DriveConstants.kMotorKi,
+                // DriveConstants.kMotorKd,
+                // DriveConstants.kMotorKf);
                 config.encoder
                                 .positionConversionFactor((2 * Math.PI) / DriveConstants.kMotorReduction)
                                 .velocityConversionFactor(((2 * Math.PI) / 60.0) / DriveConstants.kMotorReduction)
@@ -54,7 +67,7 @@ public class DriveIOSpark implements DriveIO {
                                                 PersistMode.kPersistParameters));
 
                 config.inverted(DriveConstants.kLeftInverted)
-                                .follow(leftLeader);
+                                .follow(leftLeader, false);
                 SparkUtil.tryUntilOk(
                                 leftFollower,
                                 5,
@@ -62,12 +75,22 @@ public class DriveIOSpark implements DriveIO {
                                                 PersistMode.kPersistParameters));
 
                 config.inverted(DriveConstants.kRightInverted)
-                                .follow(rightLeader);
+                                .follow(rightLeader, false);
                 SparkUtil.tryUntilOk(
                                 rightFollower,
                                 5,
                                 () -> rightFollower.configure(config, ResetMode.kResetSafeParameters,
                                                 PersistMode.kPersistParameters));
+
+                SparkUtil.tryUntilOk(
+                                leftLeader,
+                                5,
+                                () -> leftEncoder.setPosition(0));
+
+                SparkUtil.tryUntilOk(
+                                rightLeader,
+                                5,
+                                () -> rightEncoder.setPosition(0));
 
         }
 
@@ -93,8 +116,16 @@ public class DriveIOSpark implements DriveIO {
         }
 
         @Override
-        public void setVelocity(double leftRadPerSec, double rightRadPerSec) {
-                leftController.setReference(leftRadPerSec, ControlType.kVelocity);
-                rightController.setReference(rightRadPerSec, ControlType.kVelocity);
+        public void setVelocity(double leftRadPerSec, double rightRadPerSec, double leftFFVolts, double rightFFVolts) {
+                leftController.setReference(leftRadPerSec, ControlType.kVelocity, ClosedLoopSlot.kSlot0, leftFFVolts);
+                rightController.setReference(rightRadPerSec, ControlType.kVelocity, ClosedLoopSlot.kSlot0,
+                                rightFFVolts);
         }
+
+        @Override
+        public void setDutyCycle(double leftOut, double rightOut) {
+                leftController.setReference(leftOut, ControlType.kDutyCycle);
+                rightController.setReference(rightOut, ControlType.kDutyCycle);
+        }
+
 }

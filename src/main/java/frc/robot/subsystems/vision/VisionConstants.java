@@ -64,5 +64,5 @@ public class VisionConstants {
         // correction rate
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> singleTagStdDevs = VecBuilder.fill(4, 4, 8);
-        public static final Matrix<N3, N1> multiTagStdDevs = VecBuilder.fill(0.4, 0.4, 0.8);
+        public static final Matrix<N3, N1> multiTagStdDevs = VecBuilder.fill(0.35, 0.35, 0.75);
 }

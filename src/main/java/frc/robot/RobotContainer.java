@@ -96,7 +96,7 @@ public class RobotContainer {
     oreoChooser.addCmd("Wailmer", autoRoutines::Wailmer);
     oreoChooser.addCmd("Seel", autoRoutines::Seel);
 
-    RobotModeTriggers.teleop().onTrue(servoSubsystem.setAngle(90));
+    RobotModeTriggers.autonomous().onTrue(servoSubsystem.setAngle(90));
 
     configureBindings();
 
@@ -112,9 +112,9 @@ public class RobotContainer {
     // .setDefaultCommand(
     // Commands.run(() -> driveSubsystem.runClosedLoop(1, 1), driveSubsystem));
 
-    driveController.rightTrigger().whileTrue(coralSubsystem.runCoral(8.0));
+    driveController.rightTrigger().whileTrue(coralSubsystem.runCoral(7.0));
     driveController.leftTrigger().whileTrue(coralSubsystem.runCoral(-6.0));
-    driveController.rightBumper().whileTrue(coralSubsystem.runCoral(6.0));
+    driveController.rightBumper().whileTrue(coralSubsystem.runCoral(5.0));
     driveController.y().and(DriverStation::isDisabled)
         .onTrue(Commands.runOnce(() -> driveSubsystem.setPose(Pose2d.kZero), driveSubsystem)
             .ignoringDisable(true));

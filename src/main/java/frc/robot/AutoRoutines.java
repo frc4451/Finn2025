@@ -26,7 +26,7 @@ public class AutoRoutines {
     private Command score() {
         return Commands.deadline(
                 Commands.waitSeconds(1),
-                coral.runCoral(6.0),
+                coral.runCoral(5.0),
                 drive.driveCommand(() -> 0.0, () -> 0.0));
     }
 

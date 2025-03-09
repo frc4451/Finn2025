@@ -50,7 +50,7 @@ public class Robot extends LoggedRobot {
 
     DriverStation.silenceJoystickConnectionWarning(true);
     Logger.registerURCL(URCL.startExternal());
-    Logger.start();
+    // Logger.start();
   }
 
   @Override

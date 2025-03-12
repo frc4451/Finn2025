@@ -53,6 +53,30 @@ public class AutoRoutines {
 
         return Commands.sequence(
                 factory.resetOdometry(trajectory1),
+                wait(0.01),
+                factory.resetOdometry(trajectory1),
+                wait(0.01),
+                factory.trajectoryCmd(trajectory1),
+                wait(0.15),
+                score(),
+                wait(0.15),
+                factory.trajectoryCmd(trajectory2),
+                wait(.15),
+                factory.trajectoryCmd(trajectory3),
+                wait(0.15),
+                score());
+    }
+
+    public Command Waillord() {
+        String trajectory1 = "FSLtoCIJ";
+        String trajectory2 = "CIJtoHL";
+        String trajectory3 = "HLtoCKL";
+
+        return Commands.sequence(
+                factory.resetOdometry(trajectory1),
+                wait(0.1),
+                factory.resetOdometry(trajectory1),
+                wait(0.1),
                 factory.trajectoryCmd(trajectory1),
                 wait(0.15),
                 score(),
@@ -72,6 +96,9 @@ public class AutoRoutines {
 
         return Commands.sequence(
                 factory.resetOdometry(trajectory1),
+                wait(0.1),
+                factory.resetOdometry(trajectory1),
+                wait(0.1),
                 factory.trajectoryCmd(trajectory1),
                 wait(0.15),
                 score(),

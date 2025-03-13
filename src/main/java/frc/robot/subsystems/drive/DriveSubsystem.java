@@ -184,6 +184,9 @@ public class DriveSubsystem implements Subsystem {
 
         // Apply the generated speeds
         runClosedLoop(speeds);
+        Logger.recordOutput("Odometry/Choreo/Sample/Pose", sample.getPose());
+        Logger.recordOutput("Odometry/Choreo/Sample/PoseError", sample.getPose().minus(pose));
+        Logger.recordOutput("Odometry/Choreo/Sample/ChassisSpeeds", sample.getChassisSpeeds());
     }
 
     private void runDutyCycle(double leftOut, double rightOut) {

@@ -21,8 +21,8 @@
    "MaxV":{
     "dimension":"LinVel",
     "var":{
-     "exp":"2 m / s",
-     "val":2.0
+     "exp":"1.5 m / s",
+     "val":1.5
     }
    }
   },
@@ -113,12 +113,12 @@
    },
    "HL":{
     "x":{
-     "exp":"1.1 m",
-     "val":1.1
+     "exp":"1.5 m",
+     "val":1.5
     },
     "y":{
-     "exp":"7 m",
-     "val":7.0
+     "exp":"7.4 m",
+     "val":7.4
     },
     "heading":{
      "exp":"-54 deg",

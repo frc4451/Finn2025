@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.Logger;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
+import choreo.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.coral.CoralSubsystem;
@@ -23,10 +24,10 @@ public class AutoRoutines {
 
     }
 
-    private Command score() {
+    private Command score(double scoreVolts) {
         return Commands.deadline(
                 Commands.waitSeconds(1),
-                coral.runCoral(5.0),
+                coral.runCoral(scoreVolts),
                 drive.driveCommand(() -> 0.0, () -> 0.0));
     }
 
@@ -43,7 +44,7 @@ public class AutoRoutines {
                 factory.resetOdometry(trajectory),
                 factory.trajectoryCmd(trajectory),
                 wait(0.15),
-                score());
+                score(6));
     }
 
     public Command Wailmer() {
@@ -58,35 +59,13 @@ public class AutoRoutines {
                 wait(0.01),
                 factory.trajectoryCmd(trajectory1),
                 wait(0.15),
-                score(),
+                score(5),
                 wait(0.15),
                 factory.trajectoryCmd(trajectory2),
                 wait(.15),
                 factory.trajectoryCmd(trajectory3),
                 wait(0.15),
-                score());
-    }
-
-    public Command Waillord() {
-        String trajectory1 = "FSLtoCIJ";
-        String trajectory2 = "CIJtoHL";
-        String trajectory3 = "HLtoCKL";
-
-        return Commands.sequence(
-                factory.resetOdometry(trajectory1),
-                wait(0.1),
-                factory.resetOdometry(trajectory1),
-                wait(0.1),
-                factory.trajectoryCmd(trajectory1),
-                wait(0.15),
-                score(),
-                wait(0.15),
-                factory.trajectoryCmd(trajectory2),
-                wait(.15),
-                factory.trajectoryCmd(trajectory3),
-                wait(0.15),
-                score());
-
+                score(6));
     }
 
     public Command Seel() {
@@ -101,13 +80,13 @@ public class AutoRoutines {
                 wait(0.1),
                 factory.trajectoryCmd(trajectory1),
                 wait(0.15),
-                score(),
+                score(5),
                 wait(0.15),
                 factory.trajectoryCmd(trajectory2),
                 wait(.5),
                 factory.trajectoryCmd(trajectory3),
                 wait(0.15),
-                score());
+                score(6));
         // time elapsed AS OF 2/27 - 14.8 sec
     }
 

@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.bobot_state.varc.BargeTagTracker;
 import frc.robot.bobot_state.varc.HPSTagTracker;
 import frc.robot.bobot_state.varc.ReefTagTracker;
-import frc.robot.field.FieldConstants.ReefFace;
 import frc.robot.field.FieldUtils;
 import frc.robot.subsystems.vision.PoseObservation;
 import frc.robot.util.VirtualSubsystem;
@@ -58,7 +57,7 @@ public class BobotState extends VirtualSubsystem {
   public static Rotation2d getRotationToClosestBargeIfPresent() {
     return BobotState.bargeTracker.getRotationTarget();
   }
-  
+
   @Override
   public void periodic() {
 

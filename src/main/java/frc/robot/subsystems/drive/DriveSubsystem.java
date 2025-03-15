@@ -9,8 +9,6 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
 import choreo.trajectory.DifferentialSample;
 import edu.wpi.first.math.controller.LTVUnicycleController;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;

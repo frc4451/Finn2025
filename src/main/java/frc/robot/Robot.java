@@ -13,13 +13,11 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Threads;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.coral.CoralIOSpark;
-import frc.robot.subsystems.coral.CoralSubsystem;
+import frc.robot.bobot_state.BobotState;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.util.VirtualSubsystem;
 
@@ -59,6 +57,9 @@ public class Robot extends LoggedRobot {
     Threads.setCurrentThreadPriority(true, 99);
 
     VirtualSubsystem.runPeriodically();
+
+    m_robotContainer.field.setRobotPose(BobotState.getGlobalPose());
+    SmartDashboard.putData("Field", m_robotContainer.field);
 
     // Runs the Scheduler. This is responsible for polling buttons, adding
     // newly-scheduled commands, running already-scheduled commands, removing

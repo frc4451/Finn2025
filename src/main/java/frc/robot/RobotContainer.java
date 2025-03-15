@@ -4,18 +4,16 @@
 
 package frc.robot;
 
-import java.util.Set;
-
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import frc.robot.autos.AutoRoutines;
 import frc.robot.bobot_state.BobotState;
-import frc.robot.bobot_state.varc.TargetAngleTracker;
 import frc.robot.commands.RotateToTarget;
 import frc.robot.controllers.CommandCustomXboxController;
 import frc.robot.subsystems.coral.CoralIO;
@@ -46,6 +44,8 @@ public class RobotContainer {
   private final AutoFactory autoFactory;
   public final AutoChooser oreoChooser;
   private final AutoRoutines autoRoutines;
+
+  public final Field2d field = new Field2d();
 
   public RobotContainer() {
     new BobotState();
@@ -113,7 +113,7 @@ public class RobotContainer {
     // Commands.run(() -> driveSubsystem.runClosedLoop(1, 1), driveSubsystem));
 
     driveController.rightTrigger().whileTrue(coralSubsystem.runCoral(7.0));
-    driveController.leftTrigger().whileTrue(coralSubsystem.runCoral(-6.0));
+    driveController.leftTrigger().whileTrue(coralSubsystem.runCoral(-7.0));
     driveController.rightBumper().whileTrue(coralSubsystem.runCoral(5.0));
     driveController.y().and(DriverStation::isDisabled)
         .onTrue(Commands.runOnce(() -> driveSubsystem.setPose(Pose2d.kZero), driveSubsystem)

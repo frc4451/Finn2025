@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.bobot_state.BobotState;
 import frc.robot.field.FieldConstants.ReefFace;
 import frc.robot.field.FieldUtils;
-import java.util.Optional;
 
 public class ReefTagTracker extends TargetAngleTracker {
   private Rotation2d rotationTarget;

@@ -4,19 +4,21 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 public enum ChoreoPaths {
-    SLtoCIJ("SLtoCIJ"),
-    SRtoCEF("SRtoCEF"),
-    SMtoCGH("SMtoCGH"),
-    CEFtoHR("CEFtoHR"),
-    CIJtoHL("CIJtoHL"),
-    CKLtoHL("CKLtoHL"),
-    HLtoCKL("HLtoCKL"),
-    HRtoCCD("HRtoCCD");
+    SLtoCIJ("SLtoCIJ", false),
+    SRtoCEF("SRtoCEF", false),
+    SMtoCGH("SMtoCGH", false),
+    CEFtoHR("CEFtoHR", false),
+    CIJtoHL("CIJtoHL", false),
+    CKLtoHL("CKLtoHL", false),
+    HLtoCKL("HLtoCKL", false),
+    HRtoCCD("HRtoCCD", false);
 
     public final String name;
+    public final boolean scoring;
 
-    private ChoreoPaths(String name) {
+    private ChoreoPaths(String name, boolean scoring) {
         this.name = name;
+        this.scoring = scoring;
     }
 
     public static Iterator<String> pathSequence(ChoreoPaths... paths) {

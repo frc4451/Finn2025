@@ -27,6 +27,7 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon1;
 import frc.robot.subsystems.servo.ServoIOReal;
+import frc.robot.subsystems.servo.ServoJJ;
 import frc.robot.subsystems.servo.ServoSubsystem;
 import frc.robot.subsystems.vision.Vision;
 
@@ -39,6 +40,7 @@ public class RobotContainer {
   private final DriveSubsystem driveSubsystem;
   protected final CoralSubsystem coralSubsystem;
   private final ServoSubsystem servoSubsystem = new ServoSubsystem(new ServoIOReal());
+  private final ServoJJ servoJJ = new ServoJJ();
   private final Vision vision = new Vision();
 
   private final AutoFactory autoFactory;
@@ -98,6 +100,7 @@ public class RobotContainer {
     oreoChooser.addCmd("SeelTest", autoRoutines::SeelTest);
 
     RobotModeTriggers.teleop().onTrue(servoSubsystem.setAngle(90));
+    RobotModeTriggers.teleop().onTrue(servoJJ.setAngle(90));
 
     configureBindings();
 

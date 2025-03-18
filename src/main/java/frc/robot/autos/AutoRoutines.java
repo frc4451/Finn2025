@@ -91,9 +91,7 @@ public class AutoRoutines {
 
         return Commands.sequence(
                 ResetOdometry(ChoreoPaths.SRtoCEFtest),
-                factory.trajectoryCmd(ChoreoPaths.SRtoCEFtest.name),
-                wait(0.15),
-                score(5),
-                wait(0.15));
+                move(ChoreoPaths.SRtoCEFtest),
+                score(5, .5));
     }
 }

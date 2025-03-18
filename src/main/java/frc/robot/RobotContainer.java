@@ -39,7 +39,8 @@ public class RobotContainer {
 
   private final DriveSubsystem driveSubsystem;
   protected final CoralSubsystem coralSubsystem;
-  private final ServoSubsystem servoSubsystem = new ServoSubsystem(new ServoIOReal());
+  // private final ServoSubsystem servoSubsystem = new ServoSubsystem(new
+  // ServoIOReal());
   private final ServoJJ servoJJ = new ServoJJ();
   private final Vision vision = new Vision();
 
@@ -99,7 +100,7 @@ public class RobotContainer {
     oreoChooser.addCmd("Seel", autoRoutines::Seel);
     oreoChooser.addCmd("SeelTest", autoRoutines::SeelTest);
 
-    RobotModeTriggers.teleop().onTrue(servoSubsystem.setAngle(90));
+    // RobotModeTriggers.teleop().onTrue(servoSubsystem.setAngle(90));
     RobotModeTriggers.teleop().onTrue(servoJJ.setAngle(90));
 
     configureBindings();

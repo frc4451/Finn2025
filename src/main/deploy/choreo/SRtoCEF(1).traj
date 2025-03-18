@@ -18,7 +18,7 @@
  },
  "params":{
   "waypoints":[
-    {"x":{"exp":"StartRight.x", "val":7.6}, "y":{"exp":"StartRight.y", "val":0.8}, "heading":{"exp":"157 deg", "val":2.7401669256310974}, "intervals":256, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"StartRight.x", "val":7.6}, "y":{"exp":"StartRight.y", "val":0.7}, "heading":{"exp":"157 deg", "val":2.7401669256310974}, "intervals":256, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"5.3256731033325195 m", "val":5.3256731033325195}, "y":{"exp":"2.504328966140747 m", "val":2.504328966140747}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":481, "split":false, "fixTranslation":true, "fixHeading":false, "overrideIntervals":false},
     {"x":{"exp":"CEF.x", "val":5.1}, "y":{"exp":"CEF.y", "val":2.85}, "heading":{"exp":"CEF.heading", "val":2.0943951023931953}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[

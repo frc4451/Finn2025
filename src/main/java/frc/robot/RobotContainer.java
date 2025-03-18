@@ -95,6 +95,7 @@ public class RobotContainer {
     oreoChooser.addCmd("Shpeal", autoRoutines::Shpeal);
     oreoChooser.addCmd("Wailmer", autoRoutines::Wailmer);
     oreoChooser.addCmd("Seel", autoRoutines::Seel);
+    oreoChooser.addCmd("SeelTest", autoRoutines::SeelTest);
 
     RobotModeTriggers.teleop().onTrue(servoSubsystem.setAngle(90));
 

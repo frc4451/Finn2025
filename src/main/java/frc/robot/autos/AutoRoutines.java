@@ -63,6 +63,7 @@ public class AutoRoutines {
                 wait(0.15),
                 score(6),
                 factory.trajectoryCmd(ChoreoPaths.CKLtoHL.name));
+
     }
 
     public Command Seel() {
@@ -77,8 +78,19 @@ public class AutoRoutines {
                 wait(.5),
                 factory.trajectoryCmd(ChoreoPaths.HRtoCCD.name),
                 wait(0.15),
-                score(6));
+                score(6),
+                factory.trajectoryCmd(ChoreoPaths.CCDtoHR.name));
         // time elapsed AS OF 2/27 - 14.8 sec
         // time elapsed AS OF 3/15 - 14.2 sec
+    }
+
+    public Command SeelTest() {
+
+        return Commands.sequence(
+                ResetOdometry(ChoreoPaths.SRtoCEFtest),
+                factory.trajectoryCmd(ChoreoPaths.SRtoCEFtest.name),
+                wait(0.15),
+                score(5),
+                wait(0.15));
     }
 }

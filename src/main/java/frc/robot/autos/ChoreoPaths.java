@@ -11,7 +11,9 @@ public enum ChoreoPaths {
     CIJtoHL("CIJtoHL"),
     CKLtoHL("CKLtoHL"),
     HLtoCKL("HLtoCKL"),
-    HRtoCCD("HRtoCCD");
+    HRtoCCD("HRtoCCD"),
+    CCDtoHR("CCDtoHR"),
+    SRtoCEFtest("SRtoCEF(2)");
 
     public final String name;
 

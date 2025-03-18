@@ -50,12 +50,12 @@ public class AutoRoutines {
     }
 
     public Command move(ChoreoPaths path) {
-        return Commands.sequence(factory.trajectoryCmd(path.name),
+        return Commands.sequence(
+                factory.trajectoryCmd(path.name),
                 wait(0.15));
     }
 
     public Command Shpeal() {
-
         return Commands.sequence(
                 ResetOdometry(ChoreoPaths.SMtoCGH),
                 move(ChoreoPaths.SMtoCGH),
@@ -63,7 +63,6 @@ public class AutoRoutines {
     }
 
     public Command Wailmer() {
-
         return Commands.sequence(
                 ResetOdometry(ChoreoPaths.SLtoCIJ),
                 move(ChoreoPaths.SLtoCIJ),
@@ -75,7 +74,6 @@ public class AutoRoutines {
     }
 
     public Command Seel() {
-
         return Commands.sequence(
                 ResetOdometry(ChoreoPaths.SRtoCEF),
                 move(ChoreoPaths.SRtoCEF),

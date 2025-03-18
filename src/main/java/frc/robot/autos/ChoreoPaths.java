@@ -4,24 +4,23 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 public enum ChoreoPaths {
-    SLtoCIJ("SLtoCIJ", false),
-    SRtoCEF("SRtoCEF", false),
-    SMtoCGH("SMtoCGH", false),
-    CEFtoHR("CEFtoHR", false),
-    CIJtoHL("CIJtoHL", false),
-    CKLtoHL("CKLtoHL", false),
-    HLtoCKL("HLtoCKL", false),
-    HRtoCCD("HRtoCCD", false);
+    SLtoCIJ("SLtoCIJ"),
+    SRtoCEF("SRtoCEF"),
+    SMtoCGH("SMtoCGH"),
+    CEFtoHR("CEFtoHR"),
+    CIJtoHL("CIJtoHL"),
+    CKLtoHL("CKLtoHL"),
+    HLtoCKL("HLtoCKL"),
+    HRtoCCD("HRtoCCD");
 
     public final String name;
-    public final boolean scoring;
 
-    private ChoreoPaths(String name, boolean scoring) {
+    private ChoreoPaths(String name) {
         this.name = name;
-        this.scoring = scoring;
     }
 
     public static Iterator<String> pathSequence(ChoreoPaths... paths) {
         return Arrays.stream(paths).map(path -> path.name).iterator();
     }
 }
+// my cat "4y ````````"

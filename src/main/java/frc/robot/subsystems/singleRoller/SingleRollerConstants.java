@@ -1,12 +1,15 @@
-package frc.robot.subsystems.coral;
+package frc.robot.subsystems.singleRoller;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-public class CoralConstants {
+public class SingleRollerConstants {
 
-    public static final int kCoralMotorId = 5;
+    public static final int kSingleRollerMotorId = 5;
 
-    public static final MotorType kCoralMotorType = MotorType.kBrushed;
+    private final double reduction = 0.0;
+    private double positionGoalRotations = 0;
+
+    public static final MotorType kSingleRollerMotorType = MotorType.kBrushed;
     public static final int kUpdatePeriodMilliseconds = 20;
     public static final double kMotorReduction = 1.0;
     public static final double kMoi = 1.0;

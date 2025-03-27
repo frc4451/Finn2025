@@ -6,14 +6,17 @@ import java.util.Iterator;
 public enum ChoreoPaths {
     SLtoCIJ("SLtoCIJ"),
     SRtoCEF("SRtoCEF"),
-    SMtoCGH("SMtoCGH"),
+    SMBuffertoCGH("SMBuffertoCGH"),
     CEFtoHR("CEFtoHR"),
     CIJtoHL("CIJtoHL"),
     CKLtoHL("CKLtoHL"),
     HLtoCKL("HLtoCKL"),
     HRtoCCD("HRtoCCD"),
     CCDtoHR("CCDtoHR"),
-    SRtoCEFtest("SRtoCEF(1)");
+    SRtoCEFtest("SRtoCEF(1)"),
+    CEFtoHRtest("CEFtoHR(1)"),
+    HRtoCCDtest("HRtoCCD(1)"),
+    SMBuffer("SMBuffer");
 
     public final String name;
 

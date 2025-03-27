@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.lang.module.FindException;
+
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,10 +18,10 @@ import frc.robot.autos.AutoRoutines;
 import frc.robot.bobot_state.BobotState;
 import frc.robot.commands.RotateToTarget;
 import frc.robot.controllers.CommandCustomXboxController;
-import frc.robot.subsystems.coral.CoralIO;
-import frc.robot.subsystems.coral.CoralIOSim;
-import frc.robot.subsystems.coral.CoralIOSpark;
-import frc.robot.subsystems.coral.CoralSubsystem;
+import frc.robot.subsystems.singleRoller.SingleRollerIO;
+import frc.robot.subsystems.singleRoller.SingleRollerIOSim;
+import frc.robot.subsystems.singleRoller.SingleRollerIOSpark;
+import frc.robot.subsystems.singleRoller.SingleRollerSubsystem;
 import frc.robot.subsystems.drive.DriveIO;
 import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveIOSpark;
@@ -28,7 +30,6 @@ import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon1;
 import frc.robot.subsystems.servo.ServoIOReal;
 import frc.robot.subsystems.servo.ServoJJ;
-import frc.robot.subsystems.servo.ServoSubsystem;
 import frc.robot.subsystems.vision.Vision;
 
 public class RobotContainer {
@@ -38,7 +39,8 @@ public class RobotContainer {
       Constants.XboxDriverControllerPort);
 
   private final DriveSubsystem driveSubsystem;
-  protected final CoralSubsystem coralSubsystem;
+  protected final SingleRollerSubsystem coralSubsystem;
+  protected final SingleRollerSubsystem climberSubsystem;
   // private final ServoSubsystem servoSubsystem = new ServoSubsystem(new
   // ServoIOReal());
   private final ServoJJ servoJJ = new ServoJJ();
@@ -56,14 +58,16 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         driveSubsystem = new DriveSubsystem(new DriveIOSpark(), new GyroIOPigeon1());
-        coralSubsystem = new CoralSubsystem(new CoralIOSpark());
+        coralSubsystem = new SingleRollerSubsystem(new SingleRollerIOSpark(5));
+        climberSubsystem = new SingleRollerSubsystem(new SingleRollerIOSpark(6));
         break;
 
       case SIM:
         driveSubsystem = new DriveSubsystem(new DriveIOSim(), new GyroIO() {
-
         });
-        coralSubsystem = new CoralSubsystem(new CoralIOSim() {
+        coralSubsystem = new SingleRollerSubsystem(new SingleRollerIOSim() {
+        });
+        climberSubsystem = new SingleRollerSubsystem(new SingleRollerIOSim() {
         });
         break;
 
@@ -71,9 +75,10 @@ public class RobotContainer {
       default:
         driveSubsystem = new DriveSubsystem(new DriveIO() {
         }, new GyroIO() {
-
         });
-        coralSubsystem = new CoralSubsystem(new CoralIO() {
+        coralSubsystem = new SingleRollerSubsystem(new SingleRollerIO() {
+        });
+        climberSubsystem = new SingleRollerSubsystem(new SingleRollerIO() {
         });
         break;
     }
@@ -97,8 +102,8 @@ public class RobotContainer {
     // autoFactory.trajectoryCmd("Test")));
     oreoChooser.addCmd("Shpeal", autoRoutines::Shpeal);
     oreoChooser.addCmd("Wailmer", autoRoutines::Wailmer);
+    // oreoChooser.addCmd("SeelTest", autoRoutines::Seel);
     oreoChooser.addCmd("Seel", autoRoutines::Seel);
-    oreoChooser.addCmd("SeelTest", autoRoutines::SeelTest);
 
     // RobotModeTriggers.teleop().onTrue(servoSubsystem.setAngle(90));
     RobotModeTriggers.teleop().onTrue(servoJJ.setAngle(90));
@@ -117,9 +122,10 @@ public class RobotContainer {
     // .setDefaultCommand(
     // Commands.run(() -> driveSubsystem.runClosedLoop(1, 1), driveSubsystem));
 
-    driveController.rightTrigger().whileTrue(coralSubsystem.runCoral(7.0));
-    driveController.leftTrigger().whileTrue(coralSubsystem.runCoral(-7.0));
-    driveController.rightBumper().whileTrue(coralSubsystem.runCoral(5.0));
+    driveController.rightTrigger().whileTrue(coralSubsystem.runSingleRoller(7.0));
+    driveController.leftTrigger().whileTrue(coralSubsystem.runSingleRoller(-7.0));
+    driveController.rightBumper().whileTrue(coralSubsystem.runSingleRoller(6.0));
+    driveController.leftBumper().whileTrue(climberSubsystem.setReference((56 * Math.PI) / 3));
     driveController.y().and(DriverStation::isDisabled)
         .onTrue(Commands.runOnce(() -> driveSubsystem.setPose(Pose2d.kZero), driveSubsystem)
             .ignoringDisable(true));

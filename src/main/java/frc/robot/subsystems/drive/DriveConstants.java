@@ -6,10 +6,10 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 
 public class DriveConstants {
-        public static final int kFrontLeftId = 1;
-        public static final int kFrontRightId = 2;
-        public static final int kBackLeftId = 3;
-        public static final int kBackRightId = 4;
+        public static final int kFrontLeftId = 2;
+        public static final int kFrontRightId = 1;
+        public static final int kBackLeftId = 4;
+        public static final int kBackRightId = 3;
         public static final int kPigeonId = 6;
 
         public static final double kRampRateSeconds = 1.0;

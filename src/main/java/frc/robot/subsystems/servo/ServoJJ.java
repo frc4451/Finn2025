@@ -5,9 +5,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ServoJJ extends SubsystemBase {
-    public Servo servo1 = new Servo(0);
+    private Servo servo;
+
+    public ServoJJ(int channel) {
+        servo = new Servo(channel);
+    }
 
     public Command setAngle(int ang) {
-        return runOnce(() -> servo1.setAngle(ang));
+        return runOnce(() -> servo.setAngle(ang));
     }
 }

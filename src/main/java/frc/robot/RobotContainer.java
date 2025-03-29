@@ -28,7 +28,10 @@ import frc.robot.subsystems.drive.DriveIOSpark;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon1;
-import frc.robot.subsystems.servo.ServoIOReal;
+import frc.robot.subsystems.pivot.PivotIO;
+import frc.robot.subsystems.pivot.PivotIOSim;
+import frc.robot.subsystems.pivot.PivotIOSpark;
+import frc.robot.subsystems.pivot.PivotSubsystem;
 import frc.robot.subsystems.servo.ServoJJ;
 import frc.robot.subsystems.vision.Vision;
 
@@ -40,10 +43,11 @@ public class RobotContainer {
 
   private final DriveSubsystem driveSubsystem;
   protected final SingleRollerSubsystem coralSubsystem;
-  protected final SingleRollerSubsystem climberSubsystem;
-  // private final ServoSubsystem servoSubsystem = new ServoSubsystem(new
-  // ServoIOReal());
-  private final ServoJJ servoJJ = new ServoJJ();
+  protected final PivotSubsystem climberSubsystem;
+
+  private final ServoJJ frontFlap = new ServoJJ(1);
+  private final ServoJJ intakeDropoutLeft = new ServoJJ(2);
+  private final ServoJJ intakeDropoutRight = new ServoJJ(3);
   private final Vision vision = new Vision();
 
   private final AutoFactory autoFactory;
@@ -58,8 +62,8 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         driveSubsystem = new DriveSubsystem(new DriveIOSpark(), new GyroIOPigeon1());
-        coralSubsystem = new SingleRollerSubsystem(new SingleRollerIOSpark(5));
-        climberSubsystem = new SingleRollerSubsystem(new SingleRollerIOSpark(6));
+        coralSubsystem = new SingleRollerSubsystem(new SingleRollerIOSpark());
+        climberSubsystem = new PivotSubsystem(new PivotIOSpark());
         break;
 
       case SIM:
@@ -67,7 +71,7 @@ public class RobotContainer {
         });
         coralSubsystem = new SingleRollerSubsystem(new SingleRollerIOSim() {
         });
-        climberSubsystem = new SingleRollerSubsystem(new SingleRollerIOSim() {
+        climberSubsystem = new PivotSubsystem(new PivotIOSim() {
         });
         break;
 
@@ -78,7 +82,7 @@ public class RobotContainer {
         });
         coralSubsystem = new SingleRollerSubsystem(new SingleRollerIO() {
         });
-        climberSubsystem = new SingleRollerSubsystem(new SingleRollerIO() {
+        climberSubsystem = new PivotSubsystem(new PivotIO() {
         });
         break;
     }
@@ -106,7 +110,7 @@ public class RobotContainer {
     oreoChooser.addCmd("Seel", autoRoutines::Seel);
 
     // RobotModeTriggers.teleop().onTrue(servoSubsystem.setAngle(90));
-    RobotModeTriggers.teleop().onTrue(servoJJ.setAngle(90));
+    RobotModeTriggers.teleop().onTrue(frontFlap.setAngle(90));
 
     configureBindings();
 
@@ -124,16 +128,28 @@ public class RobotContainer {
 
     driveController.rightTrigger().whileTrue(coralSubsystem.runSingleRoller(7.0));
     driveController.leftTrigger().whileTrue(coralSubsystem.runSingleRoller(-7.0));
-    driveController.rightBumper().whileTrue(coralSubsystem.runSingleRoller(6.0));
-    driveController.leftBumper().whileTrue(climberSubsystem.setReference((56 * Math.PI) / 3));
+    driveController.rightBumper().and(driveController.leftBumper().negate())
+        .whileTrue(coralSubsystem.runSingleRoller(6.0));
+
+    driveController.leftBumper().and(driveController.rightBumper())
+        .onTrue(intakeDropoutLeft.setAngle(90).alongWith(intakeDropoutRight.setAngle(90)))
+        .whileTrue(climberSubsystem.setReference(378 / (.75 * Math.PI)));
+    driveController.leftBumper().and(driveController.b())
+        .onTrue(intakeDropoutLeft.setAngle(90).alongWith(intakeDropoutRight.setAngle(90)))
+        .whileTrue(climberSubsystem.setReference(0));
+
     driveController.y().and(DriverStation::isDisabled)
         .onTrue(Commands.runOnce(() -> driveSubsystem.setPose(Pose2d.kZero), driveSubsystem)
             .ignoringDisable(true));
+
     driveController.x()
-        .whileTrue(new RotateToTarget(driveSubsystem, () -> BobotState.getRotationToClosestReefIfPresent(),
+        .whileTrue(new RotateToTarget(driveSubsystem, BobotState::getRotationToClosestReefIfPresent,
             () -> -driveController.getLeftY()));
     driveController.a()
-        .whileTrue(new RotateToTarget(driveSubsystem, () -> BobotState.getRotationToClosestHPSIfPresent(),
+        .whileTrue(new RotateToTarget(driveSubsystem, BobotState::getRotationToClosestHPSIfPresent,
+            () -> -driveController.getLeftY()));
+    driveController.y().and(DriverStation::isTeleop)
+        .whileTrue(new RotateToTarget(driveSubsystem, BobotState::getRotationToClosestBargeIfPresent,
             () -> -driveController.getLeftY()));
 
   }

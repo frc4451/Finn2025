@@ -1,7 +1,5 @@
 package frc.robot.autos;
 
-import java.util.ArrayList;
-
 import choreo.auto.AutoFactory;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;

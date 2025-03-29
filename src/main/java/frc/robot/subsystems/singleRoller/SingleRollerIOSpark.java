@@ -17,14 +17,13 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class SingleRollerIOSpark implements SingleRollerIO {
         /** Creates the SingleRollerMotor and Encoder objects */
-        protected int CANid;
 
-        public SingleRollerIOSpark(int CANid) {
-                this.CANid = CANid;
+        public SingleRollerIOSpark() {
                 configureSingleRollerSettings();
         }
 
-        private final SparkMax SingleRollerMotor = new SparkMax(CANid, SingleRollerConstants.kSingleRollerMotorType);
+        private final SparkMax SingleRollerMotor = new SparkMax(SingleRollerConstants.kSingleRollerMotorId,
+                        SingleRollerConstants.kSingleRollerMotorType);
         private final RelativeEncoder SingleRollerEncoder = SingleRollerMotor.getEncoder();
         private final SparkClosedLoopController closedLoopController = SingleRollerMotor.getClosedLoopController();
 

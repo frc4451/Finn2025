@@ -187,9 +187,9 @@ public class DriveSubsystem implements Subsystem {
         Logger.recordOutput("Odometry/Choreo/Sample/ChassisSpeeds", sample.getChassisSpeeds());
     }
 
-    private void runDutyCycle(double leftOut, double rightOut) {
-        driveIO.setDutyCycle(leftOut, rightOut);
-    }
+    // private void runDutyCycle(double leftOut, double rightOut) {
+    // driveIO.setDutyCycle(leftOut, rightOut);
+    // }
 
     public void drive(double forward, double rotation) {
         WheelSpeeds speeds;

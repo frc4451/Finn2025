@@ -10,6 +10,7 @@ public class GyroIOPigeon1 implements GyroIO {
     }
 
     public void updateInputs(GyroIOInputs inputs) {
+
         inputs.yaw = pigeon.getRotation2d();
         inputs.connected = true;
     }

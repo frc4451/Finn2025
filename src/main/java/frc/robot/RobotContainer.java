@@ -37,120 +37,122 @@ import frc.robot.subsystems.vision.Vision;
 
 public class RobotContainer {
 
-  // space for calling subsystems and what not
-  private final CommandCustomXboxController driveController = new CommandCustomXboxController(
-      Constants.XboxDriverControllerPort);
+    // space for calling subsystems and what not
+    private final CommandCustomXboxController driveController = new CommandCustomXboxController(
+            Constants.XboxDriverControllerPort);
+    private final CommandCustomXboxController operatorController = new CommandCustomXboxController(
+            Constants.XboxOperatorControllerPort);
 
-  private final DriveSubsystem driveSubsystem;
-  protected final SingleRollerSubsystem coralSubsystem;
-  protected final PivotSubsystem climberSubsystem;
+    private final DriveSubsystem driveSubsystem;
+    protected final SingleRollerSubsystem coralSubsystem;
+    protected final PivotSubsystem climberSubsystem;
+    private final ServoJJ frontFlap = new ServoJJ(0);
+    private final ServoJJ intakeDropout = new ServoJJ(1);
+    private final Vision vision = new Vision();
 
-  private final ServoJJ frontFlap = new ServoJJ(1);
-  private final ServoJJ intakeDropoutLeft = new ServoJJ(2);
-  private final ServoJJ intakeDropoutRight = new ServoJJ(3);
-  private final Vision vision = new Vision();
+    private final AutoFactory autoFactory;
+    public final AutoChooser oreoChooser;
+    private final AutoRoutines autoRoutines;
 
-  private final AutoFactory autoFactory;
-  public final AutoChooser oreoChooser;
-  private final AutoRoutines autoRoutines;
+    public final Field2d field = new Field2d();
 
-  public final Field2d field = new Field2d();
+    public RobotContainer() {
+        new BobotState();
 
-  public RobotContainer() {
-    new BobotState();
+        switch (Constants.currentMode) {
+            case REAL:
+                driveSubsystem = new DriveSubsystem(new DriveIOSpark(), new GyroIOPigeon1());
+                coralSubsystem = new SingleRollerSubsystem(new SingleRollerIOSpark());
+                climberSubsystem = new PivotSubsystem(new PivotIOSpark());
+                break;
 
-    switch (Constants.currentMode) {
-      case REAL:
-        driveSubsystem = new DriveSubsystem(new DriveIOSpark(), new GyroIOPigeon1());
-        coralSubsystem = new SingleRollerSubsystem(new SingleRollerIOSpark());
-        climberSubsystem = new PivotSubsystem(new PivotIOSpark());
-        break;
+            case SIM:
+                driveSubsystem = new DriveSubsystem(new DriveIOSim(), new GyroIO() {
+                });
+                coralSubsystem = new SingleRollerSubsystem(new SingleRollerIOSim() {
+                });
+                climberSubsystem = new PivotSubsystem(new PivotIOSim() {
+                });
+                break;
 
-      case SIM:
-        driveSubsystem = new DriveSubsystem(new DriveIOSim(), new GyroIO() {
-        });
-        coralSubsystem = new SingleRollerSubsystem(new SingleRollerIOSim() {
-        });
-        climberSubsystem = new PivotSubsystem(new PivotIOSim() {
-        });
-        break;
+            case REPLAY:
+            default:
+                driveSubsystem = new DriveSubsystem(new DriveIO() {
+                }, new GyroIO() {
+                });
+                coralSubsystem = new SingleRollerSubsystem(new SingleRollerIO() {
+                });
+                climberSubsystem = new PivotSubsystem(new PivotIO() {
+                });
+                break;
+        }
 
-      case REPLAY:
-      default:
-        driveSubsystem = new DriveSubsystem(new DriveIO() {
-        }, new GyroIO() {
-        });
-        coralSubsystem = new SingleRollerSubsystem(new SingleRollerIO() {
-        });
-        climberSubsystem = new PivotSubsystem(new PivotIO() {
-        });
-        break;
+        oreoChooser = new AutoChooser();
+
+        RobotModeTriggers.autonomous().whileTrue(oreoChooser.selectedCommandScheduler());
+
+        autoFactory = new AutoFactory(
+                driveSubsystem::getPose,
+                driveSubsystem::setPose,
+                driveSubsystem::followTrajectory,
+                true,
+                driveSubsystem);
+
+        autoRoutines = new AutoRoutines(autoFactory, coralSubsystem, driveSubsystem);
+        SmartDashboard.putData("Auto Choices", oreoChooser);
+
+        // oreoChooser.addCmd("OreoTest", () -> Commands.sequence(
+        // autoFactory.resetOdometry("Test"),
+        // autoFactory.trajectoryCmd("Test")));
+        oreoChooser.addCmd("Shpeal", autoRoutines::Shpeal);
+        oreoChooser.addCmd("Wailmer", autoRoutines::Wailmer);
+        // oreoChooser.addCmd("SeelTest", autoRoutines::Seel);
+        oreoChooser.addCmd("Seel", autoRoutines::Seel);
+
+        // RobotModeTriggers.teleop().onTrue(servoSubsystem.setAngle(90));
+        RobotModeTriggers.teleop().onTrue(frontFlap.setAngle(90));
+        RobotModeTriggers.teleop().onTrue(intakeDropout.setAngle(180));
+
+        configureBindings();
+
     }
 
-    oreoChooser = new AutoChooser();
+    // *configures the bindings for any controllers */
+    private void configureBindings() {
+        // sets the default command for the drive train
+        driveSubsystem
+                .setDefaultCommand(
+                        driveSubsystem.driveCommand(() -> -driveController.getLeftY(),
+                                () -> -driveController.getRightX()));
+        // driveSubsystem
+        // .setDefaultCommand(
+        // Commands.run(() -> driveSubsystem.runClosedLoop(1, 1), driveSubsystem));
 
-    RobotModeTriggers.autonomous().whileTrue(oreoChooser.selectedCommandScheduler());
+        driveController.rightTrigger().whileTrue(coralSubsystem.runSingleRoller(7.0));
+        driveController.leftTrigger().whileTrue(coralSubsystem.runSingleRoller(-7.0));
+        driveController.rightBumper().and(driveController.leftBumper().negate())
+                .whileTrue(coralSubsystem.runSingleRoller(6.0));
 
-    autoFactory = new AutoFactory(
-        driveSubsystem::getPose,
-        driveSubsystem::setPose,
-        driveSubsystem::followTrajectory,
-        true,
-        driveSubsystem);
+        driveController.y().and(DriverStation::isDisabled)
+                .onTrue(Commands.runOnce(() -> driveSubsystem.setPose(Pose2d.kZero), driveSubsystem)
+                        .ignoringDisable(true));
 
-    autoRoutines = new AutoRoutines(autoFactory, coralSubsystem, driveSubsystem);
-    SmartDashboard.putData("Auto Choices", oreoChooser);
+        driveController.x()
+                .whileTrue(new RotateToTarget(driveSubsystem, BobotState::getRotationToClosestReefIfPresent,
+                        () -> -driveController.getLeftY()));
+        driveController.a()
+                .whileTrue(new RotateToTarget(driveSubsystem, BobotState::getRotationToClosestHPSIfPresent,
+                        () -> -driveController.getLeftY()));
+        driveController.y().and(DriverStation::isTeleop)
+                .whileTrue(new RotateToTarget(driveSubsystem, BobotState::getRotationToClosestBargeIfPresent,
+                        () -> -driveController.getLeftY()));
 
-    // oreoChooser.addCmd("OreoTest", () -> Commands.sequence(
-    // autoFactory.resetOdometry("Test"),
-    // autoFactory.trajectoryCmd("Test")));
-    oreoChooser.addCmd("Shpeal", autoRoutines::Shpeal);
-    oreoChooser.addCmd("Wailmer", autoRoutines::Wailmer);
-    // oreoChooser.addCmd("SeelTest", autoRoutines::Seel);
-    oreoChooser.addCmd("Seel", autoRoutines::Seel);
+        operatorController.leftBumper()
+                .whileTrue(climberSubsystem.setReference(0));
+        operatorController.rightBumper()
+                .whileTrue(climberSubsystem.setReference(250));
+        operatorController.b()
+                .whileTrue(intakeDropout.setAngle(90).andThen(intakeDropout.setAngle(0)));
 
-    // RobotModeTriggers.teleop().onTrue(servoSubsystem.setAngle(90));
-    RobotModeTriggers.teleop().onTrue(frontFlap.setAngle(90));
-
-    configureBindings();
-
-  }
-
-  // *configures the bindings for any controllers */
-  private void configureBindings() {
-    // sets the default command for the drive train
-    driveSubsystem
-        .setDefaultCommand(
-            driveSubsystem.driveCommand(() -> -driveController.getLeftY(), () -> -driveController.getRightX()));
-    // driveSubsystem
-    // .setDefaultCommand(
-    // Commands.run(() -> driveSubsystem.runClosedLoop(1, 1), driveSubsystem));
-
-    driveController.rightTrigger().whileTrue(coralSubsystem.runSingleRoller(7.0));
-    driveController.leftTrigger().whileTrue(coralSubsystem.runSingleRoller(-7.0));
-    driveController.rightBumper().and(driveController.leftBumper().negate())
-        .whileTrue(coralSubsystem.runSingleRoller(6.0));
-
-    driveController.leftBumper().and(driveController.rightBumper())
-        .onTrue(intakeDropoutLeft.setAngle(90).alongWith(intakeDropoutRight.setAngle(90)))
-        .whileTrue(climberSubsystem.setReference(378 / (.75 * Math.PI)));
-    driveController.leftBumper().and(driveController.b())
-        .onTrue(intakeDropoutLeft.setAngle(90).alongWith(intakeDropoutRight.setAngle(90)))
-        .whileTrue(climberSubsystem.setReference(0));
-
-    driveController.y().and(DriverStation::isDisabled)
-        .onTrue(Commands.runOnce(() -> driveSubsystem.setPose(Pose2d.kZero), driveSubsystem)
-            .ignoringDisable(true));
-
-    driveController.x()
-        .whileTrue(new RotateToTarget(driveSubsystem, BobotState::getRotationToClosestReefIfPresent,
-            () -> -driveController.getLeftY()));
-    driveController.a()
-        .whileTrue(new RotateToTarget(driveSubsystem, BobotState::getRotationToClosestHPSIfPresent,
-            () -> -driveController.getLeftY()));
-    driveController.y().and(DriverStation::isTeleop)
-        .whileTrue(new RotateToTarget(driveSubsystem, BobotState::getRotationToClosestBargeIfPresent,
-            () -> -driveController.getLeftY()));
-
-  }
+    }
 }

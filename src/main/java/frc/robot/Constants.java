@@ -13,4 +13,5 @@ public class Constants {
     }
 
     public static final int XboxDriverControllerPort = 0;
+    public static final int XboxOperatorControllerPort = 1;
 }

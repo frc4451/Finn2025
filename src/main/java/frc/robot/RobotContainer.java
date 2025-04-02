@@ -112,9 +112,6 @@ public class RobotContainer {
 
                 // RobotModeTriggers.teleop().onTrue(servoSubsystem.setAngle(90));
                 RobotModeTriggers.teleop().onTrue(frontFlap.setAngle(90));
-                RobotModeTriggers.teleop().onTrue(intakeDropout1.setAngle(0.0));
-                RobotModeTriggers.teleop().onTrue(intakeDropout2.setAngle(0.0));
-
                 configureBindings();
 
         }
@@ -158,7 +155,7 @@ public class RobotContainer {
                                 .whileTrue(climberSubsystem.setReference(-180));
                 operatorController.b()
                                 .whileTrue(intakeDropout1.setAngle(180))
-                                .whileTrue(intakeDropout2.setAngle(0.5));
+                                .whileTrue(intakeDropout2.setAngle(0));
 
         }
 }

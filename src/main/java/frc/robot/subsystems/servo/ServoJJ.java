@@ -14,4 +14,8 @@ public class ServoJJ extends SubsystemBase {
     public Command setAngle(int ang) {
         return runOnce(() -> servo.setAngle(ang));
     }
+
+    public Command setAngle(double angl) {
+        return runOnce(() -> servo.set(angl * 1.4446));
+    }
 }

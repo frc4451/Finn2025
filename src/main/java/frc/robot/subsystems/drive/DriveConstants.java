@@ -32,8 +32,8 @@ public class DriveConstants {
 
         public static final double kMotorKf = 0.00;
 
-        public static final double kMotorKs = 0.176;
-        public static final double kMotorKv = 0.177;
+        public static final double kMotorKs = 0.120;
+        public static final double kMotorKv = 0.163;
 
         /** Sim values for PID */
         public static final double kSimKp = 0.0;

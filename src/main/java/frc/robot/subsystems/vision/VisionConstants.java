@@ -58,7 +58,7 @@ public class VisionConstants {
                                         SimCameraConfig.ARDUCAM_OV9281_70));
 
         public static final double ambiguityCutoff = 0.05;
-        public static final double singleTagPoseCutoffMeters = 4;
+        public static final double singleTagPoseCutoffMeters = 3.5;
 
         // The standard deviations of our vision estimated poses, which affect
         // correction rate

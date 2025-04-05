@@ -27,10 +27,11 @@ public class AutoRoutines {
     }
 
     private Command score(double volts) {
-        return Commands.deadline(
-                Commands.waitSeconds(1),
-                coral.runSingleRoller(volts),
-                drive.driveCommand(() -> 0.0, () -> 0.0));
+        return score(volts, 1);
+    }
+
+    private Command score() {
+        return score(7.5, 1);
     }
 
     private Command wait(Double sec) {
@@ -53,6 +54,8 @@ public class AutoRoutines {
 
     public Command move(ChoreoPaths path) {
         return Commands.sequence(
+                // Commands.runOnce(() -> Logger.recordOutput("Odometry/Choreo/Trajectory",
+                // path.))
                 factory.trajectoryCmd(path.name),
                 wait(0.15));
     }
@@ -62,7 +65,7 @@ public class AutoRoutines {
                 ResetOdometry(ChoreoPaths.SMBuffer),
                 move(ChoreoPaths.SMBuffer),
                 move(ChoreoPaths.SMBuffertoCGH),
-                score(6));
+                score(6.5));
     }
 
     public Command Wailmer() {
@@ -100,5 +103,4 @@ public class AutoRoutines {
                 move(ChoreoPaths.HRtoCCDtest),
                 score(6, 0.25));
     }
-
 }

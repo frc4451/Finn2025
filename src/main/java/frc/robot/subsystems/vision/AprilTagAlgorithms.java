@@ -14,14 +14,25 @@ public class AprilTagAlgorithms {
         && target.getPoseAmbiguity() < VisionConstants.ambiguityCutoff;
   }
 
+  /** only for single april tag */
+  public static boolean isUsable(PhotonTrackedTarget target) {
+    return VisionConstants.fieldLayout.getTagPose(target.getFiducialId()).isPresent()
+        && target.getPoseAmbiguity() < VisionConstants.ambiguityCutoff
+        && target.getBestCameraToTarget().getTranslation().toTranslation2d()
+            .getNorm() < VisionConstants.singleTagPoseCutoffMeters;
+  }
+
   /**
-   * The standard deviations of the estimated pose from {@link #getEstimatedGlobalPose()}, for use
-   * with {@link edu.wpi.first.math.estimator.SwerveDrivePoseEstimator SwerveDrivePoseEstimator}.
+   * The standard deviations of the estimated pose from
+   * {@link #getEstimatedGlobalPose()}, for use
+   * with {@link edu.wpi.first.math.estimator.SwerveDrivePoseEstimator
+   * SwerveDrivePoseEstimator}.
    * This should only be used when there are targets visible.
    *
    * @param estimatedPose The estimated pose to guess standard deviations for.
-   * @param targets The targets used in the calc for the pose.
-   * @return The calculated standard deviations. Or empty if not suitable for estimation.
+   * @param targets       The targets used in the calc for the pose.
+   * @return The calculated standard deviations. Or empty if not suitable for
+   *         estimation.
    * @apiNote Calc is short for calculator by the way.
    * @apiNote I'm just using slang guys.
    */
@@ -31,11 +42,11 @@ public class AprilTagAlgorithms {
     double avgDistance = 0;
     for (PhotonTrackedTarget target : targets) {
       var tagPose = VisionConstants.fieldLayout.getTagPose(target.getFiducialId());
-      if (tagPose.isEmpty()) continue;
+      if (tagPose.isEmpty())
+        continue;
 
       numTags++;
-      avgDistance +=
-          tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
+      avgDistance += tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
     }
 
     Matrix<N3, N1> stdDevs = VisionConstants.singleTagStdDevs;

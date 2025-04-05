@@ -27,11 +27,10 @@ public class AprilTagIOPhoton implements AprilTagIO {
 
     robotToCamera = source.robotToCamera();
 
-    estimator =
-        new PhotonPoseEstimator(
-            VisionConstants.fieldLayout,
-            PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-            source.robotToCamera());
+    estimator = new PhotonPoseEstimator(
+        VisionConstants.fieldLayout,
+        PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+        source.robotToCamera());
 
     estimator.setMultiTagFallbackStrategy(PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
   }
@@ -74,7 +73,7 @@ public class AprilTagIOPhoton implements AprilTagIO {
       for (PhotonTrackedTarget target : result.getTargets()) {
         if (AprilTagAlgorithms.isValid(target)) {
           // for (TargetCorner corner : target.getDetectedCorners()) {
-          //   validCorners.add(new Translation2d(corner.x, corner.y));
+          // validCorners.add(new Translation2d(corner.x, corner.y));
           // }
           target.getDetectedCorners().stream()
               .map(corner -> new Translation2d(corner.x, corner.y))
@@ -86,7 +85,7 @@ public class AprilTagIOPhoton implements AprilTagIO {
               VisionConstants.fieldLayout.getTagPose(target.getFiducialId()).get());
         } else {
           // for (TargetCorner corner : target.getDetectedCorners()) {
-          //   rejectedCorners.add(new Translation2d(corner.x, corner.y));
+          // rejectedCorners.add(new Translation2d(corner.x, corner.y));
           // }
           target.getDetectedCorners().stream()
               .map(corner -> new Translation2d(corner.x, corner.y))
@@ -138,18 +137,16 @@ public class AprilTagIOPhoton implements AprilTagIO {
         MultiTargetPNPResult multiTagResult = result.getMultiTagResult().get();
 
         Pose3d pose = estimatedPose.estimatedPose;
-        Matrix<N3, N1> stdDevs =
-            AprilTagAlgorithms.getEstimationStdDevs(pose.toPose2d(), result.getTargets());
+        Matrix<N3, N1> stdDevs = AprilTagAlgorithms.getEstimationStdDevs(pose.toPose2d(), result.getTargets());
 
-        PoseObservation observation =
-            new PoseObservation(
-                estimatedPose.estimatedPose,
-                estimatedPose.timestampSeconds,
-                multiTagResult.estimatedPose.ambiguity,
-                // multiTagResult.fiducialIDsUsed.stream().mapToInt(id -> id).toArray()
-                -100,
-                stdDevs,
-                PoseEstimationMethod.MULTI_TAG);
+        PoseObservation observation = new PoseObservation(
+            estimatedPose.estimatedPose,
+            estimatedPose.timestampSeconds,
+            multiTagResult.estimatedPose.ambiguity,
+            // multiTagResult.fiducialIDsUsed.stream().mapToInt(id -> id).toArray()
+            -100,
+            stdDevs,
+            PoseEstimationMethod.MULTI_TAG);
 
         validPoseObservations.add(observation);
         validPoses.add(observation.robotPose());
@@ -157,18 +154,16 @@ public class AprilTagIOPhoton implements AprilTagIO {
         PhotonTrackedTarget target = result.getTargets().get(0);
 
         Pose3d pose = estimatedPose.estimatedPose;
-        Matrix<N3, N1> stdDevs =
-            AprilTagAlgorithms.getEstimationStdDevs(pose.toPose2d(), result.getTargets());
-          
-        PoseObservation observation =
-            new PoseObservation(
-                estimatedPose.estimatedPose,
-                estimatedPose.timestampSeconds,
-                target.poseAmbiguity,
-                // new int[] {target.fiducialId}
-                target.fiducialId,
-                stdDevs,
-                PoseEstimationMethod.SINGLE_TAG);
+        Matrix<N3, N1> stdDevs = AprilTagAlgorithms.getEstimationStdDevs(pose.toPose2d(), result.getTargets());
+
+        PoseObservation observation = new PoseObservation(
+            estimatedPose.estimatedPose,
+            estimatedPose.timestampSeconds,
+            target.poseAmbiguity,
+            // new int[] {target.fiducialId}
+            target.fiducialId,
+            stdDevs,
+            PoseEstimationMethod.SINGLE_TAG);
 
         if (AprilTagAlgorithms.isValid(target)) {
           validPoseObservations.add(observation);

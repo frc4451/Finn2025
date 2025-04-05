@@ -109,9 +109,10 @@ public class RobotContainer {
                 oreoChooser.addCmd("Wailmer", autoRoutines::Wailmer);
                 // oreoChooser.addCmd("SeelTest", autoRoutines::Seel);
                 oreoChooser.addCmd("Seel", autoRoutines::Seel);
+                oreoChooser.addCmd("FF Calibration", () -> driveSubsystem.feedforwardCharacterization());
 
-                // RobotModeTriggers.teleop().onTrue(servoSubsystem.setAngle(90));
-                RobotModeTriggers.teleop().onTrue(frontFlap.setAngle(90));
+                // RobotModeTriggers.autonomous().onTrue(servoSubsystem.setAngle(90));
+                RobotModeTriggers.autonomous().onTrue(frontFlap.setAngle(90));
                 configureBindings();
 
         }
@@ -119,15 +120,14 @@ public class RobotContainer {
         // *configures the bindings for any controllers */
         private void configureBindings() {
                 // sets the default command for the drive train
-                driveSubsystem
-                                .setDefaultCommand(
-                                                driveSubsystem.driveCommand(() -> -driveController.getLeftY(),
-                                                                () -> -driveController.getRightX()));
+                driveSubsystem.setDefaultCommand(
+                                driveSubsystem.driveCommand(() -> -driveController.getLeftY(),
+                                                () -> -driveController.getRightX()));
                 // driveSubsystem
                 // .setDefaultCommand(
                 // Commands.run(() -> driveSubsystem.runClosedLoop(1, 1), driveSubsystem));
 
-                driveController.rightTrigger().whileTrue(coralSubsystem.runSingleRoller(7.0));
+                driveController.rightTrigger().whileTrue(coralSubsystem.runSingleRoller(6.5));
                 driveController.leftTrigger().whileTrue(coralSubsystem.runSingleRoller(-7.0));
                 driveController.rightBumper().and(driveController.leftBumper().negate())
                                 .whileTrue(coralSubsystem.runSingleRoller(6.0));
@@ -150,9 +150,13 @@ public class RobotContainer {
                                                 () -> -driveController.getLeftY()));
 
                 operatorController.leftBumper()
-                                .whileTrue(climberSubsystem.setReference(10));
-                operatorController.rightBumper()
-                                .whileTrue(climberSubsystem.setReference(-180));
+                                .whileTrue(climberSubsystem.setReference(0));
+                operatorController.rightBumper().and(driveController.rightTrigger().negate())
+                                .whileTrue(climberSubsystem.setReference(-160));
+                operatorController.a()
+                                .whileTrue(climberSubsystem.setReference(160));
+                // operatorController.x()
+                // .whileTrue(climberSubsystem.setReference(-10));
                 operatorController.b()
                                 .whileTrue(intakeDropout1.setAngle(180))
                                 .whileTrue(intakeDropout2.setAngle(0));

@@ -13,7 +13,7 @@ import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.DriveSubsystem;
 
 public class RotateToTarget extends Command {
-    private final PIDController angleController = new PIDController(3.5, 0, 0.35);
+    private final PIDController angleController = new PIDController(7, 0, 0.35);
     private final DriveSubsystem drive;
     private final Supplier<Rotation2d> targetRotationSupplier;
     private final Supplier<Double> forwardInput;

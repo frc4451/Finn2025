@@ -195,12 +195,12 @@ public class DriveSubsystem implements Subsystem {
         WheelSpeeds speeds;
         if (forward != 0) {
             speeds = DifferentialDrive.curvatureDriveIK(
-                    forward * Math.abs(forward),
-                    rotation * Math.abs(rotation) / 1.4, false);
+                    forward,
+                    rotation, false);
         } else {
             speeds = DifferentialDrive.arcadeDriveIK(
                     0,
-                    rotation / 2,
+                    rotation,
                     true);
 
         }

@@ -112,7 +112,7 @@ public class RobotContainer {
                 oreoChooser.addCmd("FF Calibration", () -> driveSubsystem.feedforwardCharacterization());
 
                 // RobotModeTriggers.autonomous().onTrue(servoSubsystem.setAngle(90));
-                RobotModeTriggers.autonomous().onTrue(frontFlap.setAngle(90));
+                RobotModeTriggers.teleop().onTrue(frontFlap.setAngle(90));
                 configureBindings();
 
         }

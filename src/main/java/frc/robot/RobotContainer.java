@@ -121,8 +121,9 @@ public class RobotContainer {
         private void configureBindings() {
                 // sets the default command for the drive train
                 driveSubsystem.setDefaultCommand(
-                                driveSubsystem.driveCommand(() -> -driveController.getLeftY(),
-                                                () -> -driveController.getRightX()));
+                                driveSubsystem.driveCommand(
+                                        () -> -driveController.getLeftY(),
+                                        () -> -driveController.getRightX()));
                 // driveSubsystem
                 // .setDefaultCommand(
                 // Commands.run(() -> driveSubsystem.runClosedLoop(1, 1), driveSubsystem));
